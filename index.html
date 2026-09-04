@@ -24,14 +24,59 @@ body{
 h1,h2,h3,.disp{font-family:'Archivo Narrow',system-ui,sans-serif; letter-spacing:.02em}
 ::selection{background:var(--accent); color:#1a1305}
 
+/* ---------- schermata iniziale ---------- */
+.setup{
+  position:fixed; inset:0; z-index:300; display:none; align-items:center; justify-content:center; padding:20px;
+  background:radial-gradient(900px 600px at 50% 0%, #16402f 0%, #071009 60%);
+}
+.setup.show{display:flex}
+.setup-card{
+  width:100%; max-width:420px; background:var(--panel); border:1px solid var(--line);
+  border-radius:16px; padding:30px 26px; box-shadow:0 30px 80px rgba(0,0,0,.55); animation:pop .2s ease;
+}
+.setup-logo{
+  width:54px; height:54px; border-radius:16px; display:flex; align-items:center; justify-content:center;
+  font-size:27px; background:linear-gradient(140deg,var(--accent),var(--accent-dim)); margin-bottom:14px;
+}
+.setup-card h1{margin:0 0 4px; font-size:25px}
+.setup-card > p{margin:0 0 22px; color:var(--dim); font-size:13.5px}
+.field{margin-bottom:16px}
+.field label{display:block; font-size:13px; font-weight:600; margin-bottom:6px}
+.field input{
+  width:100%; background:var(--bg); border:1px solid var(--line); color:var(--text); font:inherit;
+  font-size:15px; padding:11px 13px; border-radius:9px; transition:.12s;
+}
+.field input:focus{outline:none; border-color:var(--accent)}
+.field input::placeholder{color:#5d726a}
+.setup-err{color:var(--danger); font-size:12.5px; min-height:17px; margin-bottom:6px}
+.setup-actions{display:flex; gap:8px}
+
 /* ---------- top bar ---------- */
+.app{display:none}
+.app.show{display:block}
 .topbar{
   position:sticky; top:0; z-index:50; display:flex; align-items:center; gap:8px;
   padding:10px 16px; background:rgba(10,23,18,.92); backdrop-filter:blur(8px);
   border-bottom:1px solid var(--line); flex-wrap:wrap;
 }
-.brand{font-weight:700; font-size:17px; margin-right:auto; white-space:nowrap}
-.brand span{color:var(--accent)}
+.identity{
+  display:flex; align-items:center; gap:9px; margin-right:auto; background:transparent;
+  border:1px solid transparent; border-radius:12px; padding:4px 8px 4px 4px; cursor:pointer;
+  font:inherit; color:inherit; text-align:left; transition:.12s;
+}
+.identity:hover{border-color:var(--line); background:var(--panel)}
+.avatar{
+  width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+  font-family:'Archivo Narrow',system-ui,sans-serif; font-weight:700; font-size:14px; flex-shrink:0;
+  background:linear-gradient(140deg,var(--accent),var(--accent-dim)); color:#1a1305; letter-spacing:.02em;
+}
+.avatar.coach{
+  width:17px; height:17px; border-radius:999px; font-size:10px;
+  background:var(--panel2); border:1px solid var(--line); color:var(--dim);
+}
+.idtext{display:flex; flex-direction:column; line-height:1.15; min-width:0}
+.idteam{font-family:'Archivo Narrow',system-ui,sans-serif; font-weight:700; font-size:16px; white-space:nowrap}
+.idcoach{display:flex; align-items:center; gap:5px; color:var(--dim); font-size:11.5px; white-space:nowrap}
 .tabs{display:flex; gap:4px; background:var(--panel); padding:4px; border-radius:999px; border:1px solid var(--line)}
 .tab{
   border:none; background:transparent; color:var(--dim); font:inherit; font-weight:600;
@@ -53,6 +98,27 @@ h1,h2,h3,.disp{font-family:'Archivo Narrow',system-ui,sans-serif; letter-spacing
 }
 .iconbtn:hover{color:var(--accent); border-color:var(--accent)}
 
+/* ---------- barra fasce ---------- */
+.subbar{
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  padding:9px 16px; border-bottom:1px solid var(--line); background:rgba(15,34,26,.5);
+}
+.subbar.hide{display:none}
+.sublbl{color:var(--dim); font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; font-weight:600}
+.seg{display:flex; gap:3px; background:var(--panel); border:1px solid var(--line); border-radius:999px; padding:3px}
+.segb{
+  border:none; background:transparent; color:var(--dim); font:inherit; font-weight:600; font-size:12.5px;
+  padding:5px 13px; border-radius:999px; cursor:pointer; transition:.15s;
+}
+.segb.active{background:var(--target); color:#06210f}
+.segb:not(.active):hover{color:var(--text)}
+.ghostbtn{
+  background:transparent; border:1px solid var(--line); color:var(--dim); font:inherit; font-size:12.5px;
+  padding:6px 13px; border-radius:999px; cursor:pointer; transition:.12s; white-space:nowrap;
+}
+.ghostbtn:hover{border-color:var(--accent); color:var(--accent)}
+.subinfo{color:var(--dim); font-size:12px; margin-left:auto}
+
 /* ---------- layout ---------- */
 main{max-width:1180px; margin:0 auto; padding:18px 16px 0}
 .page{display:none}
@@ -69,7 +135,7 @@ main{max-width:1180px; margin:0 auto; padding:18px 16px 0}
 }
 .qpill:hover{color:var(--accent); border-color:var(--accent)}
 .qpill.last{color:var(--target); border-color:rgba(51,196,110,.35)}
-[id^="t-"], .tbl-wrap{scroll-margin-top:76px}
+[id^="t-"], .tbl-wrap{scroll-margin-top:120px}
 
 /* ---------- reparto block ---------- */
 .reparto{margin-bottom:22px; border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; background:var(--panel)}
@@ -80,7 +146,7 @@ main{max-width:1180px; margin:0 auto; padding:18px 16px 0}
 .rhead h3{margin:0; font-size:15px; color:var(--accent)}
 .rhead .count{font-size:12px; color:var(--dim)}
 .tiers{display:flex; flex-wrap:wrap}
-.tier{flex:1 1 200px; min-width:170px; border-right:1px solid var(--line); border-bottom:1px solid var(--line)}
+.tier{flex:1 1 200px; min-width:190px; border-right:1px solid var(--line); border-bottom:1px solid var(--line)}
 .tier:last-child{border-right:none}
 .tier h4{
   margin:0; padding:6px 12px; font-size:11px; letter-spacing:.05em; color:var(--dim);
@@ -88,14 +154,17 @@ main{max-width:1180px; margin:0 auto; padding:18px 16px 0}
 }
 .plist{list-style:none; margin:0; padding:4px}
 .prow{
-  display:flex; align-items:center; gap:8px; padding:6px 8px; border-radius:7px; cursor:pointer;
+  display:flex; align-items:center; gap:7px; padding:6px 8px; border-radius:7px; cursor:pointer;
   transition:background .12s, color .12s; user-select:none;
 }
 .prow:hover:not(.out){background:rgba(255,255,255,.05)}
 .prow.target{background:var(--target-bg); color:var(--target)}
 .prow.out{color:var(--out-text); cursor:default}
 .prow.out .pname{text-decoration:line-through}
-.pname{flex:1; font-size:13.5px}
+.pname{flex:1; font-size:13.5px; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.chip{font-size:10px; color:var(--dim); letter-spacing:.04em; flex-shrink:0}
+.qv{font-family:'Archivo Narrow',system-ui,sans-serif; font-size:12.5px; color:var(--accent); flex-shrink:0; min-width:18px; text-align:right}
+.prow.out .chip, .prow.out .qv{color:inherit; opacity:.6}
 .flag{
   width:19px; height:19px; border-radius:5px; border:1.5px solid var(--dim); background:transparent;
   cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; padding:0;
@@ -106,6 +175,8 @@ main{max-width:1180px; margin:0 auto; padding:18px 16px 0}
 .prow.out .flag svg{display:block}
 .flag svg{width:11px; height:11px}
 .prow.purchased .flag{opacity:.35; cursor:not-allowed}
+.tier-empty{padding:22px 14px; color:var(--dim); font-size:13px; text-align:center; width:100%}
+.tier-empty button{margin-top:10px}
 
 /* ---------- tabella acquisti ---------- */
 .tbl-wrap{margin:18px 0 30px}
@@ -176,6 +247,44 @@ table.acq input[type=number]{width:70px}
 .btn.cancel{background:transparent; border:1px solid var(--line); color:var(--dim)}
 .btn.cancel:hover{color:var(--text); border-color:var(--dim)}
 
+/* ---------- editor fasce ---------- */
+.modal.wide{max-width:820px; text-align:left; max-height:88vh; display:flex; flex-direction:column; padding:20px}
+.mhead{display:flex; align-items:center; justify-content:space-between; gap:10px}
+.mhead h3{font-size:19px}
+.mhint{margin:4px 0 14px !important}
+.ftabs{display:flex; gap:4px; background:var(--panel); padding:4px; border-radius:999px; border:1px solid var(--line); align-self:flex-start; flex-wrap:wrap}
+.frow{display:flex; gap:8px; margin:12px 0 10px; flex-wrap:wrap}
+.frow input[type=search]{
+  flex:1; min-width:150px; background:var(--bg); border:1px solid var(--line); color:var(--text);
+  font:inherit; font-size:13.5px; padding:8px 12px; border-radius:8px; margin:0; text-align:left;
+}
+.frow input[type=search]:focus{outline:none; border-color:var(--accent)}
+.frow select{
+  background:var(--bg); border:1px solid var(--line); color:var(--text); font:inherit; font-size:13px;
+  padding:8px 10px; border-radius:8px;
+}
+.ftable-wrap{overflow:auto; flex:1; border:1px solid var(--line); border-radius:var(--radius); background:var(--panel)}
+table.ftable{width:100%; border-collapse:collapse}
+table.ftable th{
+  position:sticky; top:0; text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.05em;
+  color:var(--dim); padding:8px 10px; background:var(--panel2); border-bottom:1px solid var(--line); font-weight:600;
+}
+table.ftable td{padding:4px 10px; border-bottom:1px solid var(--line); font-size:13.5px}
+table.ftable tr:last-child td{border-bottom:none}
+table.ftable tr.assigned td.fn{color:var(--target)}
+td.fq{font-family:'Archivo Narrow',system-ui,sans-serif; color:var(--accent); width:44px}
+td.fs, td.fa{color:var(--dim); font-size:12.5px; width:56px}
+td.ff{width:150px}
+table.ftable select{
+  width:100%; background:transparent; border:1px solid var(--line); color:var(--text); font:inherit;
+  font-size:13px; padding:4px 6px; border-radius:6px; cursor:pointer;
+}
+table.ftable select:focus{outline:none; border-color:var(--accent)}
+table.ftable select.none{color:var(--dim)}
+.mfoot{display:flex; align-items:center; gap:10px; margin-top:14px}
+.mfoot .fcount{color:var(--dim); font-size:12.5px; margin-right:auto}
+.mfoot .btn{flex:0 0 auto; padding:10px 22px}
+
 .toast{
   position:fixed; bottom:18px; left:50%; transform:translateX(-50%) translateY(20px); opacity:0;
   background:var(--panel2); border:1px solid var(--target); color:var(--target); padding:10px 18px;
@@ -184,34 +293,80 @@ table.acq input[type=number]{width:70px}
 .toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
 
 @media(max-width:640px){
-  .brand{font-size:15px}
   .topbar{padding:8px 10px}
+  .idteam{font-size:14px}
   .tab{padding:6px 10px; font-size:12px}
   .budget{padding:6px 12px}
   .budget .num{font-size:16px}
+  .subbar{padding:8px 10px}
+  .subinfo{margin-left:0; width:100%}
   main{padding:14px 10px 0}
   .tier{flex:1 1 100%; border-right:none}
+  .modal.wide{padding:16px}
+  td.ff{width:120px}
 }
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="brand">Fasce <span>Classic</span></div>
-  <div class="tabs" id="tabs">
-    <button class="tab active" data-page="1">Por / Dif</button>
-    <button class="tab" data-page="2">Centrocampo</button>
-    <button class="tab" data-page="3">Attacco</button>
-    <button class="tab" data-page="4">Rosa</button>
+<!-- ---------- schermata iniziale ---------- -->
+<div class="setup" id="setup">
+  <div class="setup-card">
+    <div class="setup-logo">⚽</div>
+    <h1>La tua asta Classic</h1>
+    <p>Due informazioni e sei pronto a partire.</p>
+    <div class="field">
+      <label for="inTeam">Come si chiama la tua squadra?</label>
+      <input id="inTeam" type="text" placeholder="Es. Surraucao FC" maxlength="40" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="inCoach">Come si chiama il tuo allenatore?</label>
+      <input id="inCoach" type="text" placeholder="Es. Michele" maxlength="40" autocomplete="off">
+    </div>
+    <div class="setup-err" id="setupErr"></div>
+    <div class="setup-actions">
+      <button class="btn cancel" id="btnSetupCancel" hidden>Annulla</button>
+      <button class="btn confirm" id="btnSetupOk">Entra nell'asta</button>
+    </div>
   </div>
-  <div class="budget"><span class="lbl">Residuo</span><span class="num" id="budgetNum">500</span></div>
-  <button class="iconbtn" id="btnSave" title="Salva progresso su file">💾</button>
-  <button class="iconbtn" id="btnLoad" title="Carica progresso da file">📂</button>
-  <input type="file" id="loadFile" accept="application/json" style="display:none">
 </div>
 
-<main id="main"></main>
+<!-- ---------- app ---------- -->
+<div class="app" id="app">
+  <div class="topbar">
+    <button class="identity" id="identity" title="Modifica squadra e allenatore">
+      <span class="avatar" id="avTeam">⚽</span>
+      <span class="idtext">
+        <span class="idteam" id="dispTeam">—</span>
+        <span class="idcoach"><span class="avatar coach">👤</span><span id="dispCoach">—</span></span>
+      </span>
+    </button>
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-page="1">Por / Dif</button>
+      <button class="tab" data-page="2">Centrocampo</button>
+      <button class="tab" data-page="3">Attacco</button>
+      <button class="tab" data-page="4">Rosa</button>
+    </div>
+    <div class="budget"><span class="lbl">Residuo</span><span class="num" id="budgetNum">500</span></div>
+    <button class="iconbtn" id="btnSave" title="Salva progresso su file">💾</button>
+    <button class="iconbtn" id="btnLoad" title="Carica progresso da file">📂</button>
+    <input type="file" id="loadFile" accept="application/json" style="display:none">
+  </div>
 
+  <div class="subbar" id="subbar">
+    <span class="sublbl">Fasce</span>
+    <div class="seg" id="fasceSeg">
+      <button class="segb active" data-mode="suggested">Consigliate</button>
+      <button class="segb" data-mode="custom">Le mie</button>
+    </div>
+    <button class="ghostbtn" id="btnEditFasce">✏️ Personalizza fasce</button>
+    <span class="subinfo" id="fasceInfo"></span>
+  </div>
+
+  <main id="main"></main>
+</div>
+
+<!-- ---------- modale acquisto ---------- -->
 <div class="overlay" id="overlay">
   <div class="modal">
     <div class="icon">🏆</div>
@@ -225,11 +380,55 @@ table.acq input[type=number]{width:70px}
   </div>
 </div>
 
+<!-- ---------- editor fasce ---------- -->
+<div class="overlay" id="fasceOverlay">
+  <div class="modal wide">
+    <div class="mhead">
+      <h3>Le mie fasce</h3>
+      <button class="iconbtn" id="btnCloseFasce" title="Chiudi">✕</button>
+    </div>
+    <p class="mhint">Assegna una fascia ai giocatori del listone Serie A 26/27. Chi resta senza fascia non compare nel tabellone.</p>
+    <div class="ftabs" id="fRepTabs">
+      <button class="tab active" data-rep="POR">Portieri</button>
+      <button class="tab" data-rep="DIF">Difensori</button>
+      <button class="tab" data-rep="CEN">Centrocampisti</button>
+      <button class="tab" data-rep="ATT">Attaccanti</button>
+    </div>
+    <div class="frow">
+      <input type="search" id="fSearch" placeholder="Cerca giocatore o squadra…" autocomplete="off">
+      <select id="fFilter">
+        <option value="">Tutti</option>
+        <option value="assigned">Solo in fascia</option>
+        <option value="free">Senza fascia</option>
+      </select>
+      <button class="ghostbtn" id="btnPrefill">Riprendi consigliate</button>
+      <button class="ghostbtn" id="btnClearRep">Svuota reparto</button>
+    </div>
+    <div class="ftable-wrap">
+      <table class="ftable" id="fTable"></table>
+    </div>
+    <div class="mfoot">
+      <span class="fcount" id="fCount"></span>
+      <button class="btn confirm" id="btnDoneFasce">Fatto</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
-<script id="data" type="application/json">{"POR":[["TOP",["Vicario","Martinez","Meret","Svilar"]],["I",["Butez","Carnesecchi","Maignan"]],["II",["De Gea","Manolas","Okoye","Skorupski"]],["III",["Bijlow","Muric","Corvi","Caprile"]],["Titolari",["Falcone","Palmisani","Stankovic","Perri","Tornqvist"]],["Scommesse",["Provedel","Sanchez"]]],"DIF":[["TOP",["Bremer","Dimarco","Wesley"]],["I",["Akanji","Batoni","Bisseck","Chalobah","Gila","Kalulu","Mancini","Molina","Ndicka","Pavlovic"]],["II",["Bartesaghi","Cambiaso","Celik","Di Lorenzo","Lucumi","Ostigaard","Ramon","Rrahmani","Solet","Spence","Spinazzola","Stones","Zappacosta"]],["III",["Bernasconi","Couto","Dragusin","Gabbia","Heggem","Hermoso","Jimenez","Kamara","Kempf","Kristensen","Miranda","Scalvini","Tavares","Tiago Gabriel","Valdepenas","Valle","Vasquez","Zortea"]],["Titolari",["Abankwah","Bella Kotchap","Birindelli","Bracaglia","Calvani","Carboni","Cinquegrano","Coco","Comuzzo","Delprato","Doekhi","Doig","Gaspar","Sutalo","Valeri","Vojvoda","Hainaut","Idzes","Ismajili","Kouadio","Leysen","Mangas","Marcandalli","Mina","Monterisi","Oyono","Provstgaard","Rodriguez","Schingtienne","Troilo","Viery"]],["Scommesse",["Buongiorno","Carlos Augusto","De Winter","Lulli","Tomori"]]],"CEN":[["TOP",["Baturina","Calhanoglu","Frattesi","McTominay","Orsolini","Nico Paz","Pulisic"]],["I",["Atta","Barella","Da Cunha","De Bruyne","Ekkelenkamp","Rabiot","Zaccagni","Zielinski","Zaniolo"]],["II",["Alajbegovic","Bernardeschi","Chukweze","Conceicao","Cristante","Douglas Luiz","Ederson","Gaetano","Gonzalez","Goncalves","Gudsmundsson","Isaksen","Kessie","Kone M","Locatelli","Loftus","Mastantuono","Mckennie","Modric","Mora","Moreira","Odgaard","Perrone","Politano","Rodriguez","Rowe","Saelemakers","Samardzic","Taylor K","Vlasic"]],["III",["Adzic","Baldanzi","Bernabe","Cacciamani","Calò","Cambiaghi","Colpani","Ferguson","Jones","Mandragora","Musah","Njie","Oulai","Pasalic","Piotrowski","Zambo"]],["Titolari",["Adopo","Akisanmiro","Bakola","Basic","Belahyane","Busio","Casadei","Coulibaly","Ellertsson","Fagioli","Fazzini","Fitz Jim","Folorunsho","Gineitis","Gorter","Jashari","Karlstrom","Keita","Lobotka","Masini","Matic","Ndour","Ngom","Ordonez","Perez","Pierotti","Romano","Rovella","Schmid","Winks"]],["Scommesse",["Cissè","Diouf","El Sharawy","Elmas","Koopmeiners","Liberali","Pellegrini","Sucic","Vergara","Volpato"]]],"ATT":[["TOP",["Malen","Lautaro"]],["I",["Berardi","Douvikas","Hojlund","Kean","Kolo Muani","Ramos","Scamacca","Thuram"]],["II",["Beto","Davis K","Dovbyk","Dybala","Krstovic","Lauriente","Pinamonti","Raspadori","Simeone","Varela","Woltemade"]],["III",["Adams C","Boga","Colombo","Diao","Nzola","Pellegrino","Piccoli","Raimondo","Soulé"]],["Titolari",["Adams A","Bowie","Cutrone","CDK","Geubbels","Kvernadze","Maldini","Ndri","Yeboah"]],["Scommesse",["Bobcek","Bonny","Castro","Pio","Santos","Yildiz"]]]}</script>
-<script>const DATA = JSON.parse(document.getElementById('data').textContent);
+<script id="data" type="application/json">{"POR":[["TOP",["Vicario","Martinez","Meret","Svilar"]],["I",["Butez","Carnesecchi","Maignan"]],["II",["De Gea","Mandas","Okoye","Skorupski"]],["III",["Bijlow","Muric","Corvi","Caprile"]],["Titolari",["Falcone","Palmisani","Stankovic","Perri","Tornqvist"]],["Scommesse",["Provedel","Sanchez"]]],"DIF":[["TOP",["Bremer","Dimarco","Wesley"]],["I",["Akanji","Batoni","Bisseck","Chalobah","Gila","Kalulu","Mancini","Molina","Ndicka","Pavlovic"]],["II",["Bartesaghi","Cambiaso","Celik","Di Lorenzo","Lucumi","Ostigaard","Ramon","Rrahmani","Solet","Spence","Spinazzola","Stones","Zappacosta"]],["III",["Bernasconi","Couto","Dragusin","Gabbia","Heggem","Hermoso","Jimenez","Kamara","Kempf","Kristensen","Miranda","Scalvini","Tavares","Tiago Gabriel","Valdepenas","Valle","Vasquez","Zortea"]],["Titolari",["Abankwah","Bella Kotchap","Birindelli","Bracaglia","Calvani","Carboni","Cinquegrano","Coco","Comuzzo","Delprato","Doekhi","Doig","Gaspar","Sutalo","Valeri","Vojvoda","Hainaut","Idzes","Ismajili","Kouadio","Leysen","Mangas","Marcandalli","Mina","Monterisi","Oyono","Provstgaard","Rodriguez","Schingtienne","Troilo","Viery"]],["Scommesse",["Buongiorno","Carlos Augusto","De Winter","Lulli","Tomori"]]],"CEN":[["TOP",["Baturina","Calhanoglu","Frattesi","McTominay","Orsolini","Nico Paz","Pulisic"]],["I",["Atta","Barella","Da Cunha","De Bruyne","Ekkelenkamp","Rabiot","Zaccagni","Zielinski","Zaniolo"]],["II",["Alajbegovic","Bernardeschi","Chukweze","Conceicao","Cristante","Douglas Luiz","Ederson","Gaetano","Gonzalez","Goncalves","Gudsmundsson","Isaksen","Kessie","Kone M","Locatelli","Loftus","Mastantuono","Mckennie","Modric","Mora","Moreira","Odgaard","Perrone","Politano","Rodriguez","Rowe","Saelemakers","Samardzic","Taylor K","Vlasic"]],["III",["Adzic","Baldanzi","Bernabe","Cacciamani","Calò","Cambiaghi","Colpani","Ferguson","Jones","Mandragora","Musah","Njie","Oulai","Pasalic","Piotrowski","Zambo"]],["Titolari",["Adopo","Akisanmiro","Bakola","Basic","Belahyane","Busio","Casadei","Coulibaly","Ellertsson","Fagioli","Fazzini","Fitz Jim","Folorunsho","Gineitis","Gorter","Jashari","Karlstrom","Keita","Lobotka","Masini","Matic","Ndour","Ngom","Ordonez","Perez","Pierotti","Romano","Rovella","Schmid","Winks"]],["Scommesse",["Cissè","Diouf","El Sharawy","Elmas","Koopmeiners","Liberali","Pellegrini","Sucic","Vergara","Volpato"]]],"ATT":[["TOP",["Malen","Lautaro"]],["I",["Berardi","Douvikas","Hojlund","Kean","Kolo Muani","Ramos","Scamacca","Thuram"]],["II",["Beto","Davis K","Dovbyk","Dybala","Krstovic","Lauriente","Pinamonti","Raspadori","Simeone","Varela","Woltemade"]],["III",["Adams C","Boga","Colombo","Diao","Nzola","Pellegrino","Piccoli","Raimondo","Soulé"]],["Titolari",["Adams A","Bowie","Cutrone","CDK","Geubbels","Kvernadze","Maldini","Ndri","Yeboah"]],["Scommesse",["Bobcek","Bonny","Castro","Pio","Santos","Yildiz"]]]}</script>
+<script id="master" type="application/json">{"POR":[["SVILAR","ROM",27,23],["CARNESECCHI","ATA",26,21],["MAIGNAN","MIL",31,20],["MARTINEZ","INT",28,20],["VICARIO","JUV",30,20],["BUTEZ","COM",31,19],["MERET","NAP",29,15],["SKORUPSKI","BOL",35,14],["CAPRILE","CAG",25,13],["DE GEA","FIO",36,13],["FALCONE","LEC",31,12],["MANDAS","LAZ",25,12],["OKOYE","UDI",27,12],["BIJLOW","GEN",28,10],["PERRI","TOR",29,10],["MURIC","SAS",28,9],["STANKOVIC","VEN",24,9],["MILINKOVIC","NAP",29,7],["PALMISANI","FRO",22,7],["SANCHEZ","COM",29,7],["MOTTA","LAZ",21,5],["PALEARI","TOR",34,5],["THIAM","MON",28,5],["DAFFARA","PAR",22,4],["DESPLANCHES","FRO",23,3],["PROVEDEL","INT",32,3],["CORVI","PAR",25,2],["MONTIPO","VEN",30,2],["MROZEK","UDI",26,2],["TERRACCIANO","MIL",36,2],["BLEVE","LEC",31,1],["BORBEI","LEC",23,1],["CHRISTENSEN","FIO",27,1],["CONTINI","NAP",30,1],["DE MARZI GIORGIO","ROM",19,1],["DI GENNARO","INT",33,1],["FURLANETTO","LAZ",24,1],["GHIDOTTI","PAR",26,1],["GOLLINI","ROM",31,1],["GRABARA","JUV",27,1],["GRANDI","VEN",34,1],["HAPPONEN","BOL",19,1],["ISRAEL","TOR",26,1],["LEZZERINI","FIO",31,1],["LOLIC","FRO",22,1],["MASCARDI","TOR",20,1],["PADELLI","UDI",41,1],["PENEV","LEC",18,1],["PESSINA","BOL",19,1],["PIANA","UDI",23,1],["PINSOGLIO","JUV",36,1],["PISSERI","FRO",35,1],["POMPEI","ATA",20,1],["POZZI","VEN",26,1],["RADUNOVIC","CAG",30,1],["RENZETTI","LAZ",20,1],["ROSSI","ATA",35,1],["RUSSO","SAS",25,1],["SATALINO","SAS",27,1],["SHERRI","CAG",29,1],["SIVIERO","TOR",20,1],["SOMMARIVA","GEN",29,1],["SPORTIELLO","ATA",34,1],["STOLZ","GEN",25,1],["STRAJNAR","MON",19,1],["TORNQVIST","MON",24,1],["TORRIANI","MIL",21,1],["TURATI","SAS",25,1],["VASQUEZ","ROM",28,1],["VIGORITO","COM",36,1]],"DIF":[["BREMER","JUV",29,24],["AKANJI","INT",31,21],["BASTONI","INT",27,21],["MANCINI","ROM",30,21],["BISSECK","INT",26,20],["PAVLOVIC","MIL",25,20],["RRAHMANI","NAP",32,20],["DI LORENZO","NAP",33,19],["KALULU","JUV",26,19],["NDICKA","ROM",27,18],["SOLET","UDI",26,18],["STONES","INT",32,17],["GILA","MIL",26,16],["SCALVINI","ATA",23,16],["OSTIGARD","GEN",27,15],["RAMON","COM",21,15],["CHALOBAH","COM",27,14],["HERMOSO","ROM",31,14],["TIAGO GABRIEL","LEC",22,13],["VASQUEZ","GEN",28,13],["BARTESAGHI","MIL",21,12],["BUONGIORNO","NAP",27,12],["COMUZZO","TOR",21,12],["DIEGO CARLOS","PAR",33,12],["DOEKHI","LAZ",28,12],["GABBIA","MIL",27,12],["HIEN","ATA",27,12],["KEMPF","COM",31,12],["MIRANDA","BOL",26,12],["VALERI","PAR",28,12],["VALLE","COM",22,12],["BRACAGLIA","FRO",23,11],["JIMENEZ","FIO",21,11],["LUCUMI","JUV",28,11],["MINA","CAG",32,11],["BADIASHILE","NAP",25,10],["CELIK","JUV",29,10],["COCO","TOR",27,10],["COUTO","COM",24,10],["DEL PRATO","PAR",27,10],["DRAGUSIN","FIO",24,10],["HOLM","BOL",26,10],["ISMAJLI","TOR",30,10],["KOULIERAKIS","ROM",23,10],["MARUSIC","LAZ",34,10],["NUNO TAVARES","LAZ",26,10],["PEDRAZA","LAZ",30,10],["THEATE","BOL",26,10],["TOMORI","MIL",29,10],["VALDEPENAS","FIO",20,10],["VOJVODA","UDI",31,10],["BEUKEMA","NAP",28,9],["GALLO","LEC",26,9],["HEGGEM","BOL",27,9],["IDZES","SAS",26,9],["LEYSEN","SAS",23,9],["MARCANDALLI","GEN",24,9],["OBRADOR","SAS",22,9],["PAVARD","INT",30,9],["RENSCH","ROM",23,9],["SUTALO","LAZ",26,9],["BEIDI","CAG",21,8],["BELLA-KOTCHAP","VEN",25,8],["CORREIA","VEN",27,8],["DOIG","SAS",24,8],["GHILARDI","ROM",23,8],["KABASELE","UDI",35,8],["KELLY","JUV",28,8],["MONTERISI","FRO",25,8],["OBERT","CAG",24,8],["VEIGA","LEC",24,8],["VIERY","FIO",21,8],["WALUKIEWICZ","SAS",26,8],["BALERDI","ROM",27,7],["DE WINTER","MIL",24,7],["GASPAR","LEC",29,7],["KAIKI","COM",23,7],["KOLASINAC","ATA",33,7],["KOSSOUNOU","ATA",25,7],["ODENTHAL","SAS",26,7],["PONGRACIC","FIO",29,7],["RANIERI","FIO",27,7],["SMOLCIC","COM",26,7],["VALENTI","PAR",27,7],["VITIK","BOL",23,7],["ZE PEDRO","CAG",29,7],["BERTOLA","UDI",23,6],["BRITSCHGI","PAR",20,6],["CALETA-CAR","SAS",30,6],["CALVANI","FRO",22,6],["CARBONI","MON",25,6],["COMERT","TOR",28,6],["GATTI","JUV",28,6],["HAINAUT","VEN",24,6],["JESUS","VEN",35,6],["KOFLER","CAG",21,6],["MORENO","VEN",23,6],["PROVSTGAARD","LAZ",23,6],["RODRIGUEZ","CAG",21,6],["SIEBERT","LEC",24,6],["TCHATO","FRO",24,6],["CANDE","SAS",28,5],["CITTADINI","FRO",24,5],["DOSSENA","COM",28,5],["EBOSSE","UDI",27,5],["ESTUPINAN","MIL",28,5],["HALHAL","VEN",23,5],["HELLAND","BOL",21,5],["KAMBWALA","COM",22,5],["LAZZARI","LAZ",33,5],["LUCCHESI","MON",23,5],["MITAJ","GEN",23,5],["PELLEGRINI","LAZ",27,5],["SCHINGTIENNE","VEN",24,5],["TERZIC","FRO",27,5],["TROILO","PAR",23,5],["ALHASSANE","BOL",24,4],["CASALE","BOL",28,4],["FRANJIC","VEN",26,4],["GOGLICHIDZE","MON",22,4],["MARIANUCCI","NAP",22,4],["MARIN","NAP",24,4],["NDIAYE","PAR",24,4],["OYONO","FRO",25,4],["PALMA","UDI",18,4],["PATRIC","LAZ",33,4],["PUCZKA","GEN",21,4],["SVERKO","VEN",28,4],["VAN DER BREMPT","SAS",24,4],["AKPOGUMA","FRO",31,3],["DIAWARA","MIL",20,3],["GIGOT","LAZ",33,3],["GOLDANIGA","COM",33,3],["JEAN","LEC",26,3],["KOUADIO","MON",20,3],["OTOA","GEN",22,3],["ABANKWAH","UDI",22,2],["ANTOV","MON",26,2],["CARBONI","PAR",23,2],["CINQUEGRANO","SAS",22,2],["DE SILVESTRI","BOL",38,2],["DROBNIC","PAR",19,2],["MAYE","MON",20,2],["NDABA","LEC",27,2],["PIERAGNOLO","SAS",23,2],["RUGANI","JUV",32,2],["ADDO","LEC",21,1],["AMEY","FRO",21,1],["FAYED","FRO",23,1],["GOMES","VEN",18,1],["LIGUE","VEN",21,1],["PAZ","SAS",24,1],["ZIOLKOWSKI","MON",21,1]],"CEN":[["CALHANOGLU","INT",32,40],["MCTOMINAY","NAP",30,37],["BATURINA","COM",23,33],["RABIOT","MIL",31,32],["DE BRUYNE","NAP",35,31],["DIMARCO","INT",29,30],["BARELLA","INT",29,27],["DA CUNHA","COM",25,26],["MCKENNIE","JUV",28,24],["VLASIC","TOR",29,24],["ATTA","FIO",23,22],["CONCEICAO","JUV",24,22],["MASTANTUONO","FIO",19,22],["WESLEY","ROM",23,22],["EDERSON","ATA",27,21],["MODRIC","MIL",41,21],["MOLINA","ROM",28,21],["SAMARDZIC","ATA",24,21],["ZIELINSKI","INT",32,21],["GONCALVES","FIO",28,20],["KONE","ROM",25,20],["TAYLOR","LAZ",24,20],["EKKELENKAMP","UDI",26,19],["PELLEGRINI","ROM",30,19],["ANGUISSA","NAP",31,18],["DA SILVA MOREIRA","MIL",22,18],["JONES","INT",25,18],["SAELEMAEKERS","MIL",27,18],["BALDANZI","GEN",23,17],["KESSIE","ATA",30,17],["PERRONE","COM",23,17],["SPENCE","INT",26,17],["SUCIC","INT",23,17],["THORSTVEDT","SAS",27,17],["THURAM","JUV",25,17],["CASADEI","TOR",23,16],["FRATTESI","LAZ",27,16],["HUTCHINSON","MIL",23,16],["PASALIC","ATA",31,16],["CAMBIASO","JUV",26,15],["COLPANI","MON",27,15],["CRISTANTE","ROM",31,15],["ELMAS","ATA",27,15],["FAGIOLI","FIO",25,15],["LOBOTKA","NAP",32,15],["LOCATELLI","JUV",28,15],["MANDRAGORA","TOR",29,15],["VERGARA","NAP",23,15],["VOLPATO","SAS",23,15],["BERNABE","PAR",25,14],["FERGUSON","BOL",27,14],["GAETANO","ATA",26,14],["SCHMID","FRO",26,14],["SOW","GEN",29,14],["CALO","FRO",29,13],["CAQUERET","COM",26,13],["CHUKWUEZE","MIL",27,13],["KAMARA","UDI",32,13],["KONE","SAS",24,13],["PISILLI","ROM",22,13],["UNAI GOMEZ","UDI",23,13],["ZALEWSKI","ATA",24,13],["ZAPPACOSTA","ATA",34,13],["DODO","FIO",28,12],["FRENDRUP","GEN",25,12],["KARLSTROM","UDI",31,12],["KOOPMEINERS","JUV",28,12],["MKHITARYAN","INT",37,12],["NDOUR","FIO",22,12],["PESSINA","MON",29,12],["PIOTROWSKI","UDI",29,12],["SPINAZZOLA","NAP",33,12],["ADOPO","CAG",26,11],["BUSIO","VEN",24,11],["DIOUF","INT",23,11],["FAZZINI","CAG",23,11],["MATIC","SAS",38,11],["POBEGA","BOL",27,11],["ROVELLA","LAZ",25,11],["SARR","JUV",24,11],["ZHEGROVA","JUV",27,11],["BASIC","VEN",30,10],["BRAGANCA","TOR",27,10],["CARLOS AUGUSTO","INT",27,10],["COULIBALY","LEC",30,10],["DE ROON","ROM",35,10],["ELLERTSSON","GEN",24,10],["GANDELMAN","LEC",26,10],["JASHARI","MIL",24,10],["KEITA","PAR",24,10],["LIBERALI","COM",19,10],["LUIS HENRIQUE","INT",25,10],["MILLA","COM",32,10],["NICOLUSSI CAVIGLIA","PAR",26,10],["OULAI","FIO",20,10],["PEREZ","VEN",29,10],["TRAORE","GEN",26,10],["WINKS","CAG",30,10],["ZORTEA","BOL",27,10],["AKINSANMIRO","MON",22,9],["BELGHALI","TOR",24,9],["BELLANOVA","ATA",26,9],["BERNASCONI","ATA",23,9],["DELE-BASHIRU","LAZ",25,9],["FELICI","CAG",25,9],["GINEITIS","TOR",22,9],["KRISTENSEN","ATA",24,9],["LOFTUS-CHEEK","MIL",30,9],["MORO","BOL",28,9],["PATTERSON","TOR",25,9],["ROMANO","CAG",20,9],["ZERBIN","FRO",27,9],["ADZIC","SAS",20,8],["AMORIM","GEN",21,8],["BAKOLA","SAS",19,8],["BERISHA","LEC",23,8],["CACCIAMANI","TOR",19,8],["CATALDI","LAZ",32,8],["FABBIAN","PAR",23,8],["FAVASULI","NAP",22,8],["FITZ-JIM","TOR",23,8],["GRILLITSCH","FRO",31,8],["ILKHAN","TOR",22,8],["KOUTSOUPIAS","FRO",25,8],["MANGAS","MON",28,8],["MEICHTRY","GEN",21,8],["OLIVERA","NAP",29,8],["SOHM","VEN",25,8],["SUGAWARA","CAG",26,8],["TOURE","MON",28,8],["AMONDARAIN","BOL",21,7],["BONDO","MIL",23,7],["BRESCIANINI","FIO",26,7],["CICHELLA","FRO",21,7],["DOUGLAS LUIZ","JUV",28,7],["FADERA","CAG",25,7],["FOLORUNSHO","MON",28,7],["GILMOUR","NAP",25,7],["MESSIAS","GEN",35,7],["MILLER","UDI",20,7],["NGOM","LEC",22,7],["PARISI","FIO",26,7],["RICCI","COM",25,7],["SULEMANA","SAS",23,7],["BIRINDELLI","MON",27,6],["CIURRIA","MON",31,6],["COLOMBO","MON",21,6],["EHIZIBUE","GEN",31,6],["FORTINI","TOR",20,6],["GAGLIARDINI","CAG",32,6],["GELLI","FRO",30,6],["HAPS","VEN",33,6],["JOAO MARIO","FIO",26,6],["LOVRIC","UDI",28,6],["MALEH","LEC",28,6],["MASINI","FRO",25,6],["MAZZITELLI","COM",31,6],["MUSAH","MIL",24,6],["ORDONEZ","PAR",22,6],["RODRIGUEZ","TOR",34,6],["STANKOVIC","INT",21,6],["TERRACCIANO","MIL",23,6],["VENTURINO","GEN",20,6],["ARIZALA","UDI",21,5],["COMOTTO","MIL",18,5],["DEIOLA","CAG",31,5],["DRAMEH","GEN",25,5],["DUNCAN","VEN",33,5],["FLORIANI MUSSOLINI","LAZ",23,5],["GORTER","LEC",21,5],["HASA","FRO",22,5],["HELGASON","VEN",26,5],["LIPANI","SAS",21,5],["SALAH-EDDINE","ROM",24,5],["ZANOLI","UDI",26,5],["ANJORIN","TOR",25,4],["AURELIO","CAG",26,4],["BELAHYANE","LAZ",22,4],["BIRAGHI","TOR",34,4],["BOLOCA","SAS",28,4],["CABAL","JUV",25,4],["CHAKVETADZE","UDI",27,4],["EL AZZOUZI","BOL",25,4],["FORSON","MON",22,4],["IDRISSI","CAG",21,4],["ILIC","LEC",25,4],["MASSOLIN","CAG",24,4],["SABELLI","GEN",33,4],["SAGRADO","VEN",22,4],["ZARRAGA","UDI",27,4],["BAKOUNE","MON",20,3],["CIERVO","CAG",24,3],["CREMASCHI","PAR",21,3],["FOE ONDOA","MON",21,3],["GHION","SAS",26,3],["KONE","FRO",26,3],["LULLI","ROM",19,3],["MAZZOCCHI","VEN",31,3],["BAKKER","ATA",26,2],["DEMBELE","LEC",22,2],["FOFANA","LEC",23,2],["KABA","LEC",25,2],["LUONGO","TOR",18,2],["MOUT","MON",19,2],["AKARAKIRI","CAG",18,1],["DAGASSO","VEN",22,1],["EL AZZOUZI","FRO",25,1],["FARCOMENI","LAZ",20,1],["GALASSI","LAZ",19,1],["KONATE","PAR",20,1],["KOVAC","LEC",21,1],["LAHDO","COM",19,1],["LITETA","CAG",20,1],["PRZYBOREK","LAZ",19,1],["WIAFE","GEN",18,1],["DABO","VEN",22,0]],"ATT":[["MALEN","ROM",27,61],["MARTINEZ","INT",29,53],["HOJLUND","NAP",23,48],["RAMOS","MIL",25,47],["THURAM","INT",29,46],["KOLO MUANI","JUV",28,43],["PAZ","COM",22,42],["WOLTEMADE","JUV",24,42],["KEAN","COM",26,40],["DOUVIKAS","COM",27,39],["PULISIC","MIL",28,37],["YILDIZ","JUV",21,35],["ORSOLINI","BOL",29,33],["SCAMACCA","ATA",27,33],["BERARDI","SAS",32,32],["DAVIS","UDI",28,32],["DYBALA","ROM",33,31],["KRSTOVIC","ATA",26,31],["ESPOSITO FP","INT",21,29],["DE KETELAERE","ATA",25,28],["SIMEONE","TOR",31,28],["ZANIOLO","UDI",27,28],["CASTRO","ROM",22,27],["LAURIENTE","SAS",28,27],["ZACCAGNI","LAZ",31,27],["MORA CARVALHO","ROM",19,26],["PINAMONTI","LAZ",27,26],["RASPADORI","ATA",26,25],["SOULE","ROM",23,25],["DOVBYK","BOL",29,23],["GUDMUNDSSON","LAZ",29,23],["DIAO","COM",21,22],["ESPOSITO S","SAS",24,22],["BETO","FIO",28,21],["COLOMBO","GEN",24,20],["RODRIGUEZ","COM",21,20],["ROWE","ATA",23,20],["ALAJBEGOVIC","JUV",19,19],["POLITANO","NAP",33,19],["ADAMS","TOR",30,18],["RAIMONDO","FRO",22,17],["BOWIE","SAS",24,16],["PICCOLI","BOL",25,16],["VITINHA","GEN",26,16],["YEBOAH","VEN",26,16],["BERNARDESCHI","BOL",32,15],["BONNY","INT",23,15],["CUTRONE","MON",28,15],["ISAKSEN","LAZ",25,15],["ODGAARD","BOL",27,15],["STULIC","LEC",25,15],["ZAPATA","TOR",35,15],["ADAMS","VEN",26,14],["CAMBIAGHI","BOL",26,14],["CANCELLIERI","LAZ",24,14],["KEVIN CARLOS","CAG",25,14],["PELLEGRINO","FIO",25,14],["SANTOS","NAP",24,14],["BOGA","JUV",29,13],["GEUBBELS","LEC",25,13],["GHEDJEMIS","FRO",24,13],["NERES","NAP",29,13],["ROMERO","PAR",23,13],["BOBCEK","FRO",25,12],["NOSLIN","LAZ",27,12],["ORISTANIO","TOR",24,12],["PIEROTTI","LEC",25,12],["SULEMANA","ATA",24,12],["EL SHAARAWY","GEN",34,11],["KVERNADZE","FRO",23,11],["RRAHMANI","VEN",26,11],["VARELA","MON",21,11],["ADDAI","COM",21,10],["ADORANTE","VEN",26,10],["GIOVANE","NAP",23,10],["GNONTO","FIO",23,10],["GONZALEZ","JUV",28,10],["MALDINI","CAG",25,10],["MBANGULA","BOL",22,10],["BORRELLI","CAG",26,9],["DANY MOTA","MON",28,9],["HAVEL","GEN",23,9],["LUCCA","NAP",26,9],["NJIE","FIO",21,9],["NZOLA","CAG",30,9],["OSMAJIC","GEN",27,9],["ROBINSON","MON",19,9],["BIRLIGEA","FRO",26,8],["CAMARDA","MIL",18,8],["DOMINGUEZ","SAS",23,8],["FRIGAN","PAR",23,8],["KULENOVIC","TOR",27,8],["ZEBALLOS","MON",24,8],["ALMQVIST","PAR",27,7],["EKHATOR","JUV",20,7],["GUEYE","UDI",20,7],["LANG","NAP",27,7],["MONTEIRO","LEC",27,7],["NGONGE","MON",26,7],["SOTTIL","FIO",27,7],["BALDE","MON",31,6],["CISSE","MIL",20,6],["ELPHEGE","PAR",25,6],["FINI","FRO",20,6],["JOVANOVIC","UDI",20,6],["N'DRI","LEC",26,6],["ABOUKHLAL","TOR",26,5],["FATAH","LEC",22,5],["FERNANDEZ","VEN",18,5],["KARLSSON","BOL",28,5],["LONTANI","PAR",18,5],["MENDY","CAG",19,5],["TOURE","PAR",25,5],["DE SOUZA JUNIOR","GEN",19,4],["DIALLO THIAO","PAR",19,4],["MILIK","JUV",32,4],["BAYO","UDI",29,3],["LISMAN","VEN",20,2],["PIERINI","SAS",28,2],["SKJELLERUP","SAS",24,2],["DE MARTIS DE LARA","PAR",18,1],["LAERKE","LEC",19,1],["LAUBERBACH","VEN",28,1],["TREPY","CAG",20,1],["VINCIATI","UDI",19,1],["PEJICIC","UDI",19,0]]}</script>
+<script id="sugmeta" type="application/json">{"POR":{"Vicario":["VICARIO","JUV",20],"Martinez":["MARTINEZ","INT",20],"Meret":["MERET","NAP",15],"Svilar":["SVILAR","ROM",23],"Butez":["BUTEZ","COM",19],"Carnesecchi":["CARNESECCHI","ATA",21],"Maignan":["MAIGNAN","MIL",20],"De Gea":["DE GEA","FIO",13],"Mandas":["MANDAS","LAZ",12],"Okoye":["OKOYE","UDI",12],"Skorupski":["SKORUPSKI","BOL",14],"Bijlow":["BIJLOW","GEN",10],"Muric":["MURIC","SAS",9],"Corvi":["CORVI","PAR",2],"Caprile":["CAPRILE","CAG",13],"Falcone":["FALCONE","LEC",12],"Palmisani":["PALMISANI","FRO",7],"Stankovic":["STANKOVIC","VEN",9],"Perri":["PERRI","TOR",10],"Tornqvist":["TORNQVIST","MON",1],"Provedel":["PROVEDEL","INT",3],"Sanchez":["SANCHEZ","COM",7]},"DIF":{"Bremer":["BREMER","JUV",24],"Dimarco":["DIMARCO","INT",30],"Wesley":["WESLEY","ROM",22],"Akanji":["AKANJI","INT",21],"Batoni":["BASTONI","INT",21],"Bisseck":["BISSECK","INT",20],"Chalobah":["CHALOBAH","COM",14],"Gila":["GILA","MIL",16],"Kalulu":["KALULU","JUV",19],"Mancini":["MANCINI","ROM",21],"Molina":["MOLINA","ROM",21],"Ndicka":["NDICKA","ROM",18],"Pavlovic":["PAVLOVIC","MIL",20],"Bartesaghi":["BARTESAGHI","MIL",12],"Cambiaso":["CAMBIASO","JUV",15],"Celik":["CELIK","JUV",10],"Di Lorenzo":["DI LORENZO","NAP",19],"Lucumi":["LUCUMI","JUV",11],"Ostigaard":["OSTIGARD","GEN",15],"Ramon":["RAMON","COM",15],"Rrahmani":["RRAHMANI","NAP",20],"Solet":["SOLET","UDI",18],"Spence":["SPENCE","INT",17],"Spinazzola":["SPINAZZOLA","NAP",12],"Stones":["STONES","INT",17],"Zappacosta":["ZAPPACOSTA","ATA",13],"Bernasconi":["BERNASCONI","ATA",9],"Couto":["COUTO","COM",10],"Dragusin":["DRAGUSIN","FIO",10],"Gabbia":["GABBIA","MIL",12],"Heggem":["HEGGEM","BOL",9],"Hermoso":["HERMOSO","ROM",14],"Jimenez":["JIMENEZ","FIO",11],"Kamara":["KAMARA","UDI",13],"Kempf":["KEMPF","COM",12],"Kristensen":["KRISTENSEN","ATA",9],"Miranda":["MIRANDA","BOL",12],"Scalvini":["SCALVINI","ATA",16],"Tavares":["NUNO TAVARES","LAZ",10],"Tiago Gabriel":["TIAGO GABRIEL","LEC",13],"Valdepenas":["VALDEPENAS","FIO",10],"Valle":["VALLE","COM",12],"Vasquez":["VASQUEZ","GEN",13],"Zortea":["ZORTEA","BOL",10],"Abankwah":["ABANKWAH","UDI",2],"Bella Kotchap":["BELLA-KOTCHAP","VEN",8],"Birindelli":["BIRINDELLI","MON",6],"Bracaglia":["BRACAGLIA","FRO",11],"Calvani":["CALVANI","FRO",6],"Carboni":["CARBONI","PAR",2],"Cinquegrano":["CINQUEGRANO","SAS",2],"Coco":["COCO","TOR",10],"Comuzzo":["COMUZZO","TOR",12],"Delprato":["DEL PRATO","PAR",10],"Doekhi":["DOEKHI","LAZ",12],"Doig":["DOIG","SAS",8],"Gaspar":["GASPAR","LEC",7],"Sutalo":["SUTALO","LAZ",9],"Valeri":["VALERI","PAR",12],"Vojvoda":["VOJVODA","UDI",10],"Hainaut":["HAINAUT","VEN",6],"Idzes":["IDZES","SAS",9],"Ismajili":["ISMAJLI","TOR",10],"Kouadio":["KOUADIO","MON",3],"Leysen":["LEYSEN","SAS",9],"Mangas":["MANGAS","MON",8],"Marcandalli":["MARCANDALLI","GEN",9],"Mina":["MINA","CAG",11],"Monterisi":["MONTERISI","FRO",8],"Oyono":["OYONO","FRO",4],"Provstgaard":["PROVSTGAARD","LAZ",6],"Rodriguez":["RODRIGUEZ","CAG",6],"Schingtienne":["SCHINGTIENNE","VEN",5],"Troilo":["TROILO","PAR",5],"Viery":["VIERY","FIO",8],"Buongiorno":["BUONGIORNO","NAP",12],"Carlos Augusto":["CARLOS AUGUSTO","INT",10],"De Winter":["DE WINTER","MIL",7],"Lulli":["LULLI","ROM",3],"Tomori":["TOMORI","MIL",10]},"CEN":{"Baturina":["BATURINA","COM",33],"Calhanoglu":["CALHANOGLU","INT",40],"Frattesi":["FRATTESI","LAZ",16],"McTominay":["MCTOMINAY","NAP",37],"Orsolini":["ORSOLINI","BOL",33],"Nico Paz":["PAZ","COM",42],"Pulisic":["PULISIC","MIL",37],"Atta":["ATTA","FIO",22],"Barella":["BARELLA","INT",27],"Da Cunha":["DA CUNHA","COM",26],"De Bruyne":["DE BRUYNE","NAP",31],"Ekkelenkamp":["EKKELENKAMP","UDI",19],"Rabiot":["RABIOT","MIL",32],"Zaccagni":["ZACCAGNI","LAZ",27],"Zielinski":["ZIELINSKI","INT",21],"Zaniolo":["ZANIOLO","UDI",28],"Alajbegovic":["ALAJBEGOVIC","JUV",19],"Bernardeschi":["BERNARDESCHI","BOL",15],"Chukweze":["CHUKWUEZE","MIL",13],"Conceicao":["CONCEICAO","JUV",22],"Cristante":["CRISTANTE","ROM",15],"Douglas Luiz":["DOUGLAS LUIZ","JUV",7],"Ederson":["EDERSON","ATA",21],"Gaetano":["GAETANO","ATA",14],"Gonzalez":["GONZALEZ","JUV",10],"Goncalves":["GONCALVES","FIO",20],"Gudsmundsson":["GUDMUNDSSON","LAZ",23],"Isaksen":["ISAKSEN","LAZ",15],"Kessie":["KESSIE","ATA",17],"Kone M":["KONE","ROM",20],"Locatelli":["LOCATELLI","JUV",15],"Loftus":["LOFTUS-CHEEK","MIL",9],"Mastantuono":["MASTANTUONO","FIO",22],"Mckennie":["MCKENNIE","JUV",24],"Modric":["MODRIC","MIL",21],"Mora":["MORA CARVALHO","ROM",26],"Moreira":["DA SILVA MOREIRA","MIL",18],"Odgaard":["ODGAARD","BOL",15],"Perrone":["PERRONE","COM",17],"Politano":["POLITANO","NAP",19],"Rodriguez":["RODRIGUEZ","TOR",6],"Rowe":["ROWE","ATA",20],"Saelemakers":["SAELEMAEKERS","MIL",18],"Samardzic":["SAMARDZIC","ATA",21],"Taylor K":["TAYLOR","LAZ",20],"Vlasic":["VLASIC","TOR",24],"Adzic":["ADZIC","SAS",8],"Baldanzi":["BALDANZI","GEN",17],"Bernabe":["BERNABE","PAR",14],"Cacciamani":["CACCIAMANI","TOR",8],"Calò":["CALO","FRO",13],"Cambiaghi":["CAMBIAGHI","BOL",14],"Colpani":["COLPANI","MON",15],"Ferguson":["FERGUSON","BOL",14],"Jones":["JONES","INT",18],"Mandragora":["MANDRAGORA","TOR",15],"Musah":["MUSAH","MIL",6],"Njie":["NJIE","FIO",9],"Oulai":["OULAI","FIO",10],"Pasalic":["PASALIC","ATA",16],"Piotrowski":["PIOTROWSKI","UDI",12],"Zambo":["ANGUISSA","NAP",18],"Adopo":["ADOPO","CAG",11],"Akisanmiro":["AKINSANMIRO","MON",9],"Bakola":["BAKOLA","SAS",8],"Basic":["BASIC","VEN",10],"Belahyane":["BELAHYANE","LAZ",4],"Busio":["BUSIO","VEN",11],"Casadei":["CASADEI","TOR",16],"Coulibaly":["COULIBALY","LEC",10],"Ellertsson":["ELLERTSSON","GEN",10],"Fagioli":["FAGIOLI","FIO",15],"Fazzini":["FAZZINI","CAG",11],"Fitz Jim":["FITZ-JIM","TOR",8],"Folorunsho":["FOLORUNSHO","MON",7],"Gineitis":["GINEITIS","TOR",9],"Gorter":["GORTER","LEC",5],"Jashari":["JASHARI","MIL",10],"Karlstrom":["KARLSTROM","UDI",12],"Keita":["KEITA","PAR",10],"Lobotka":["LOBOTKA","NAP",15],"Masini":["MASINI","FRO",6],"Matic":["MATIC","SAS",11],"Ndour":["NDOUR","FIO",12],"Ngom":["NGOM","LEC",7],"Ordonez":["ORDONEZ","PAR",6],"Perez":["PEREZ","VEN",10],"Pierotti":["PIEROTTI","LEC",12],"Romano":["ROMANO","CAG",9],"Rovella":["ROVELLA","LAZ",11],"Schmid":["SCHMID","FRO",14],"Winks":["WINKS","CAG",10],"Cissè":["CISSE","MIL",6],"Diouf":["DIOUF","INT",11],"El Sharawy":["EL SHAARAWY","GEN",11],"Elmas":["ELMAS","ATA",15],"Koopmeiners":["KOOPMEINERS","JUV",12],"Liberali":["LIBERALI","COM",10],"Pellegrini":["PELLEGRINI","ROM",19],"Sucic":["SUCIC","INT",17],"Vergara":["VERGARA","NAP",15],"Volpato":["VOLPATO","SAS",15]},"ATT":{"Malen":["MALEN","ROM",61],"Lautaro":["MARTINEZ","INT",53],"Berardi":["BERARDI","SAS",32],"Douvikas":["DOUVIKAS","COM",39],"Hojlund":["HOJLUND","NAP",48],"Kean":["KEAN","COM",40],"Kolo Muani":["KOLO MUANI","JUV",43],"Ramos":["RAMOS","MIL",47],"Scamacca":["SCAMACCA","ATA",33],"Thuram":["THURAM","INT",46],"Beto":["BETO","FIO",21],"Davis K":["DAVIS","UDI",32],"Dovbyk":["DOVBYK","BOL",23],"Dybala":["DYBALA","ROM",31],"Krstovic":["KRSTOVIC","ATA",31],"Lauriente":["LAURIENTE","SAS",27],"Pinamonti":["PINAMONTI","LAZ",26],"Raspadori":["RASPADORI","ATA",25],"Simeone":["SIMEONE","TOR",28],"Varela":["VARELA","MON",11],"Woltemade":["WOLTEMADE","JUV",42],"Adams C":["ADAMS","TOR",18],"Boga":["BOGA","JUV",13],"Colombo":["COLOMBO","GEN",20],"Diao":["DIAO","COM",22],"Nzola":["NZOLA","CAG",9],"Pellegrino":["PELLEGRINO","FIO",14],"Piccoli":["PICCOLI","BOL",16],"Raimondo":["RAIMONDO","FRO",17],"Soulé":["SOULE","ROM",25],"Adams A":["ADAMS","VEN",14],"Bowie":["BOWIE","SAS",16],"Cutrone":["CUTRONE","MON",15],"CDK":["DE KETELAERE","ATA",28],"Geubbels":["GEUBBELS","LEC",13],"Kvernadze":["KVERNADZE","FRO",11],"Maldini":["MALDINI","CAG",10],"Ndri":["N'DRI","LEC",6],"Yeboah":["YEBOAH","VEN",16],"Bobcek":["BOBCEK","FRO",12],"Bonny":["BONNY","INT",15],"Castro":["CASTRO","ROM",27],"Pio":["ESPOSITO FP","INT",29],"Santos":["SANTOS","NAP",14],"Yildiz":["YILDIZ","JUV",35]}}</script>
+<script id="prefill" type="application/json">{"POR":{"VICARIO":"TOP","MARTINEZ":"TOP","MERET":"TOP","SVILAR":"TOP","BUTEZ":"I","CARNESECCHI":"I","MAIGNAN":"I","DE GEA":"II","MANDAS":"II","OKOYE":"II","SKORUPSKI":"II","BIJLOW":"III","MURIC":"III","CORVI":"III","CAPRILE":"III","FALCONE":"Titolari","PALMISANI":"Titolari","STANKOVIC":"Titolari","PERRI":"Titolari","TORNQVIST":"Titolari","PROVEDEL":"Scommesse","SANCHEZ":"Scommesse"},"DIF":{"BREMER":"TOP","AKANJI":"I","BASTONI":"I","BISSECK":"I","CHALOBAH":"I","GILA":"I","KALULU":"I","MANCINI":"I","NDICKA":"I","PAVLOVIC":"I","BARTESAGHI":"II","CELIK":"II","DI LORENZO":"II","LUCUMI":"II","OSTIGARD":"II","RAMON":"II","RRAHMANI":"II","SOLET":"II","STONES":"II","COUTO":"III","DRAGUSIN":"III","GABBIA":"III","HEGGEM":"III","HERMOSO":"III","JIMENEZ":"III","KEMPF":"III","MIRANDA":"III","SCALVINI":"III","NUNO TAVARES":"III","TIAGO GABRIEL":"III","VALDEPENAS":"III","VALLE":"III","VASQUEZ":"III","ABANKWAH":"Titolari","BELLA-KOTCHAP":"Titolari","BRACAGLIA":"Titolari","CALVANI":"Titolari","CARBONI":"Titolari","CINQUEGRANO":"Titolari","COCO":"Titolari","COMUZZO":"Titolari","DEL PRATO":"Titolari","DOEKHI":"Titolari","DOIG":"Titolari","GASPAR":"Titolari","SUTALO":"Titolari","VALERI":"Titolari","VOJVODA":"Titolari","HAINAUT":"Titolari","IDZES":"Titolari","ISMAJLI":"Titolari","KOUADIO":"Titolari","LEYSEN":"Titolari","MARCANDALLI":"Titolari","MINA":"Titolari","MONTERISI":"Titolari","OYONO":"Titolari","PROVSTGAARD":"Titolari","RODRIGUEZ":"Titolari","SCHINGTIENNE":"Titolari","TROILO":"Titolari","VIERY":"Titolari","BUONGIORNO":"Scommesse","DE WINTER":"Scommesse","TOMORI":"Scommesse"},"CEN":{"DIMARCO":"TOP","WESLEY":"TOP","MOLINA":"I","CAMBIASO":"II","SPENCE":"II","SPINAZZOLA":"II","ZAPPACOSTA":"II","BERNASCONI":"III","KAMARA":"III","KRISTENSEN":"III","ZORTEA":"III","BIRINDELLI":"Titolari","MANGAS":"Titolari","CARLOS AUGUSTO":"Scommesse","LULLI":"Scommesse","BATURINA":"TOP","CALHANOGLU":"TOP","FRATTESI":"TOP","MCTOMINAY":"TOP","ATTA":"I","BARELLA":"I","DA CUNHA":"I","DE BRUYNE":"I","EKKELENKAMP":"I","RABIOT":"I","ZIELINSKI":"I","CHUKWUEZE":"II","CONCEICAO":"II","CRISTANTE":"II","DOUGLAS LUIZ":"II","EDERSON":"II","GAETANO":"II","GONCALVES":"II","KESSIE":"II","KONE":"II","LOCATELLI":"II","LOFTUS-CHEEK":"II","MASTANTUONO":"II","MCKENNIE":"II","MODRIC":"II","DA SILVA MOREIRA":"II","PERRONE":"II","RODRIGUEZ":"II","SAELEMAEKERS":"II","SAMARDZIC":"II","TAYLOR":"II","VLASIC":"II","ADZIC":"III","BALDANZI":"III","BERNABE":"III","CACCIAMANI":"III","CALO":"III","COLPANI":"III","FERGUSON":"III","JONES":"III","MANDRAGORA":"III","MUSAH":"III","OULAI":"III","PASALIC":"III","PIOTROWSKI":"III","ANGUISSA":"III","ADOPO":"Titolari","AKINSANMIRO":"Titolari","BAKOLA":"Titolari","BASIC":"Titolari","BELAHYANE":"Titolari","BUSIO":"Titolari","CASADEI":"Titolari","COULIBALY":"Titolari","ELLERTSSON":"Titolari","FAGIOLI":"Titolari","FAZZINI":"Titolari","FITZ-JIM":"Titolari","FOLORUNSHO":"Titolari","GINEITIS":"Titolari","GORTER":"Titolari","JASHARI":"Titolari","KARLSTROM":"Titolari","KEITA":"Titolari","LOBOTKA":"Titolari","MASINI":"Titolari","MATIC":"Titolari","NDOUR":"Titolari","NGOM":"Titolari","ORDONEZ":"Titolari","PEREZ":"Titolari","ROMANO":"Titolari","ROVELLA":"Titolari","SCHMID":"Titolari","WINKS":"Titolari","DIOUF":"Scommesse","ELMAS":"Scommesse","KOOPMEINERS":"Scommesse","LIBERALI":"Scommesse","PELLEGRINI":"Scommesse","SUCIC":"Scommesse","VERGARA":"Scommesse","VOLPATO":"Scommesse"},"ATT":{"ORSOLINI":"TOP","PAZ":"TOP","PULISIC":"TOP","ZACCAGNI":"I","ZANIOLO":"I","ALAJBEGOVIC":"II","BERNARDESCHI":"II","GONZALEZ":"II","GUDMUNDSSON":"II","ISAKSEN":"II","MORA CARVALHO":"II","ODGAARD":"II","POLITANO":"II","ROWE":"II","CAMBIAGHI":"III","NJIE":"III","PIEROTTI":"Titolari","CISSE":"Scommesse","EL SHAARAWY":"Scommesse","MALEN":"TOP","MARTINEZ":"TOP","BERARDI":"I","DOUVIKAS":"I","HOJLUND":"I","KEAN":"I","KOLO MUANI":"I","RAMOS":"I","SCAMACCA":"I","THURAM":"I","BETO":"II","DAVIS":"II","DOVBYK":"II","DYBALA":"II","KRSTOVIC":"II","LAURIENTE":"II","PINAMONTI":"II","RASPADORI":"II","SIMEONE":"II","VARELA":"II","WOLTEMADE":"II","ADAMS":"Titolari","BOGA":"III","COLOMBO":"III","DIAO":"III","NZOLA":"III","PELLEGRINO":"III","PICCOLI":"III","RAIMONDO":"III","SOULE":"III","BOWIE":"Titolari","CUTRONE":"Titolari","DE KETELAERE":"Titolari","GEUBBELS":"Titolari","KVERNADZE":"Titolari","MALDINI":"Titolari","N'DRI":"Titolari","YEBOAH":"Titolari","BOBCEK":"Scommesse","BONNY":"Scommesse","CASTRO":"Scommesse","ESPOSITO FP":"Scommesse","SANTOS":"Scommesse","YILDIZ":"Scommesse"}}</script>
+<script>
+const SUGGESTED = JSON.parse(document.getElementById('data').textContent);
+const MASTER    = JSON.parse(document.getElementById('master').textContent);
+const SUGMETA   = JSON.parse(document.getElementById('sugmeta').textContent);
+const PREFILL   = JSON.parse(document.getElementById('prefill').textContent);
+
 const BUDGET = 500;
+const REPS = ['POR','DIF','CEN','ATT'];
+const TIERS = ['TOP','I','II','III','Titolari','Scommesse'];
 const REP_LABEL = {POR:'Portieri', DIF:'Difensori', CEN:'Centrocampisti', ATT:'Attaccanti'};
 const TIER_LABEL = {TOP:'Top', I:'1ª fascia', II:'2ª fascia', III:'3ª fascia', Titolari:'Titolari', Scommesse:'Scommesse'};
 const PAGES = [
@@ -238,33 +437,67 @@ const PAGES = [
   {id:3, reparti:['ATT'], title:'Attaccanti', sub:'Spunta chi esce, doppio clic per comprare'},
 ];
 
-// stato: mappa key -> {out:bool, target:bool}   key = REP|tier|nome
-const status = {};
-// acquisti: [{id, nome, ruolo, speso, key}]
-let purchases = [];
+// ---------------- stato ----------------
+let teamName = '', coachName = '';
+let fasceMode = 'suggested';            // 'suggested' | 'custom'
+let customFasce = null;                 // {rep:{nomeListone:fascia}}
+const status = {};                      // key -> {out, target, purchased}
+let purchases = [];                     // [{id, nome, ruolo, speso, key}]
 let uid = 1;
-let pendingKey = null;
+let pendingKey = null, pendingName = '';
 
-function keyOf(rep, tier, nome){ return rep+'|'+tier+'|'+nome; }
+function normName(s){
+  return s.normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase().replace(/[^A-Z ]/g,'').trim();
+}
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function myFasce(){
+  if(!customFasce) customFasce = JSON.parse(JSON.stringify(PREFILL));
+  return customFasce;
+}
 
+// fasce attive del reparto -> [[fascia, [{nome, team, q, key}]]]
+function tiersFor(rep){
+  if(fasceMode === 'custom'){
+    const map = myFasce()[rep] || {};
+    const buckets = {};
+    TIERS.forEach(t => buckets[t] = []);
+    MASTER[rep].forEach(([nome, team, eta, q]) => {
+      const t = map[nome];
+      if(t && buckets[t]) buckets[t].push({nome, team, q, key:nome+'|'+team});
+    });
+    return TIERS.filter(t => buckets[t].length).map(t => [t, buckets[t]]);
+  }
+  return SUGGESTED[rep].map(([tier, names]) => [tier, names.map(nome => {
+    const m = SUGMETA[rep][nome];
+    return m ? {nome, team:m[1], q:m[2], key:m[0]+'|'+m[1]}
+             : {nome, team:'', q:null, key:'?|'+normName(nome)};
+  })]);
+}
+
+// ---------------- checklist ----------------
 function buildChecklistHTML(){
   let html = '';
-  for(const rep of ['POR','DIF','CEN','ATT']){
-    const tiers = DATA[rep];
-    const total = tiers.reduce((s,t)=>s+t[1].length,0);
+  for(const rep of REPS){
+    const tiers = tiersFor(rep);
+    const total = tiers.reduce((s,t) => s + t[1].length, 0);
     let tiersHtml = '';
-    for(const [tier, names] of tiers){
+    for(const [tier, players] of tiers){
       let rows = '';
-      for(const nome of names){
-        const k = keyOf(rep,tier,nome);
-        rows += `<li class="prow" data-key="${k}" data-rep="${rep}" data-tier="${tier}" data-nome="${esc(nome)}">
-          <span class="pname">${esc(nome)}</span>
+      for(const p of players){
+        rows += `<li class="prow" data-key="${esc(p.key)}" data-rep="${rep}" data-nome="${esc(p.nome)}">
+          <span class="pname">${esc(p.nome)}</span>
+          ${p.team ? `<span class="chip">${esc(p.team)}</span>` : ''}
+          ${p.q != null ? `<span class="qv">${p.q}</span>` : ''}
           <button class="flag" title="Segna come chiamato/uscito" data-act="flag">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L19 7"/></svg>
           </button>
         </li>`;
       }
       tiersHtml += `<div class="tier" id="t-${rep}-${tier}"><h4>${TIER_LABEL[tier]||tier}</h4><ul class="plist">${rows}</ul></div>`;
+    }
+    if(!total){
+      tiersHtml = `<div class="tier-empty">Nessun giocatore in fascia per questo reparto.
+        <br><button class="ghostbtn" data-open-fasce="1">✏️ Componi le tue fasce</button></div>`;
     }
     html += `<section class="reparto" data-reparto-block="${rep}">
       <div class="rhead"><h3>${REP_LABEL[rep]}</h3><span class="count">${total} giocatori</span></div>
@@ -274,26 +507,21 @@ function buildChecklistHTML(){
   return html;
 }
 
-function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
 function renderShell(){
   const main = document.getElementById('main');
-  const checklist = buildChecklistHTML();
-  // il checklist completo viene creato una sola volta in un contenitore nascosto,
-  // poi i blocchi reparto vengono spostati (non clonati) nelle pagine giuste.
   const holder = document.createElement('div');
-  holder.innerHTML = checklist;
+  holder.innerHTML = buildChecklistHTML();
   const blocks = {};
-  holder.querySelectorAll('[data-reparto-block]').forEach(b=>{
+  holder.querySelectorAll('[data-reparto-block]').forEach(b => {
     blocks[b.getAttribute('data-reparto-block')] = b;
   });
 
   let html = '';
-  PAGES.forEach(p=>{
+  PAGES.forEach(p => {
     let nav = '<div class="quicknav"><span class="qlbl">Vai a:</span>';
-    p.reparti.forEach(rep=>{
-      DATA[rep].forEach(([tier])=>{
-        nav += `<button class="qpill" data-target="#t-${rep}-${tier}">${REP_LABEL[rep]} \u00b7 ${TIER_LABEL[tier]||tier}</button>`;
+    p.reparti.forEach(rep => {
+      tiersFor(rep).forEach(([tier]) => {
+        nav += `<button class="qpill" data-target="#t-${rep}-${tier}">${REP_LABEL[rep]} · ${TIER_LABEL[tier]||tier}</button>`;
       });
     });
     nav += `<button class="qpill last" data-target="#acquisti-${p.id}">Giocatori presi</button></div>`;
@@ -320,60 +548,69 @@ function renderShell(){
   </div>`;
   main.innerHTML = html;
 
-  PAGES.forEach(p=>{
+  PAGES.forEach(p => {
     const slot = document.getElementById('slot'+p.id);
-    p.reparti.forEach(rep=> slot.appendChild(blocks[rep]));
+    p.reparti.forEach(rep => slot.appendChild(blocks[rep]));
   });
 }
 
+function rebuild(){
+  const active = (document.querySelector('.page.active') || {}).id || 'page1';
+  renderShell();
+  const el = document.getElementById(active);
+  (el || document.getElementById('page1')).classList.add('active');
+  applyStatusToDOM();
+  renderTables();
+  updateFasceInfo();
+}
+
+// ---------------- tabelle acquisti ----------------
 function renderTables(){
   autosave();
-  // pagine 1-3: filtra per reparto di appartenenza
-  PAGES.forEach(p=>{
+  PAGES.forEach(p => {
     const rows = purchases.filter(pu => p.reparti.includes(pu.ruolo));
-    document.getElementById('tblslot'+p.id).innerHTML = tableHTML(rows, false);
-    document.getElementById('sub'+p.id).textContent = rows.reduce((s,r)=>s+(+r.speso||0),0);
+    document.getElementById('tblslot'+p.id).innerHTML = tableHTML(rows);
+    document.getElementById('sub'+p.id).textContent = rows.reduce((s,r) => s + (+r.speso||0), 0);
   });
-  // pagina 4: tutto
-  document.getElementById('tblslot4').innerHTML = tableHTML(purchases, true);
-  const totSpent = purchases.reduce((s,r)=>s+(+r.speso||0),0);
+  document.getElementById('tblslot4').innerHTML = tableHTML(purchases);
+  const totSpent = purchases.reduce((s,r) => s + (+r.speso||0), 0);
+  const left = BUDGET - totSpent;
   document.getElementById('sumBought').textContent = purchases.length;
   document.getElementById('sumSpent').textContent = totSpent;
-  document.getElementById('sumLeft').textContent = BUDGET - totSpent;
-  const left = BUDGET - totSpent;
+  document.getElementById('sumLeft').textContent = left;
   const bn = document.getElementById('budgetNum');
   bn.textContent = left;
   bn.classList.toggle('neg', left < 0);
 }
 
-function tableHTML(rows, showRepSelect){
-  if(!rows.length) return `<table class="acq"><thead><tr><th class="col-n">#</th><th>Giocatore</th><th>Ruolo</th><th>Spesi</th><th>Residuo</th><th class="col-del"></th></tr></thead>
+function tableHTML(rows){
+  const head = `<thead><tr><th class="col-n">#</th><th>Giocatore</th><th>Ruolo</th><th>Spesi</th><th>Residuo</th><th class="col-del"></th></tr></thead>`;
+  if(!rows.length) return `<table class="acq">${head}
     <tbody><tr class="empty-row"><td colspan="6">Nessun giocatore ancora — doppio clic su un nome per comprarlo</td></tr></tbody></table>`;
-  let running = BUDGET;
-  const trs = rows.map((r,i)=>{
-    running -= (+r.speso||0);
-    const repOpts = Object.keys(REP_LABEL).map(k=>`<option value="${k}" ${k===r.ruolo?'selected':''}>${k}</option>`).join('');
+  // il residuo è sempre calcolato sul totale speso, non solo sulle righe mostrate
+  const spentBefore = id => purchases.slice(0, purchases.findIndex(p => p.id === id) + 1)
+                                     .reduce((s,r) => s + (+r.speso||0), 0);
+  const trs = rows.map((r,i) => {
+    const repOpts = REPS.map(k => `<option value="${k}" ${k===r.ruolo?'selected':''}>${k}</option>`).join('');
     return `<tr data-id="${r.id}">
       <td class="col-n">${i+1}</td>
       <td><input type="text" value="${esc(r.nome)}" data-f="nome"></td>
       <td><select data-f="ruolo">${repOpts}</select></td>
       <td><input type="number" value="${r.speso}" min="0" data-f="speso"></td>
-      <td>${running}</td>
+      <td>${BUDGET - spentBefore(r.id)}</td>
       <td class="col-del"><button class="del-btn" data-del="${r.id}" title="Elimina">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button></td>
     </tr>`;
   }).join('');
-  return `<table class="acq"><thead><tr><th class="col-n">#</th><th>Giocatore</th><th>Ruolo</th><th>Spesi</th><th>Residuo</th><th class="col-del"></th></tr></thead>
-    <tbody>${trs}</tbody></table>`;
+  return `<table class="acq">${head}<tbody>${trs}</tbody></table>`;
 }
 
 function applyStatusToDOM(){
-  document.querySelectorAll('.prow').forEach(row=>{
-    const k = row.getAttribute('data-key');
-    const s = status[k];
+  document.querySelectorAll('.prow').forEach(row => {
+    const s = status[row.getAttribute('data-key')];
     row.classList.toggle('out', !!(s && s.out));
-    row.classList.toggle('target', !!(s && s.target && !(s&&s.out)));
+    row.classList.toggle('target', !!(s && s.target && !s.out));
     row.classList.toggle('purchased', !!(s && s.purchased));
   });
 }
@@ -383,11 +620,11 @@ function toast(msg){
   t.textContent = msg;
   t.classList.add('show');
   clearTimeout(t._h);
-  t._h = setTimeout(()=>t.classList.remove('show'), 2200);
+  t._h = setTimeout(() => t.classList.remove('show'), 2200);
 }
 
 // ---------------- eventi checklist ----------------
-document.addEventListener('click', e=>{
+document.addEventListener('click', e => {
   const flag = e.target.closest('.flag');
   if(flag){
     const row = flag.closest('.prow');
@@ -412,95 +649,250 @@ document.addEventListener('click', e=>{
   const del = e.target.closest('[data-del]');
   if(del){
     const id = +del.getAttribute('data-del');
-    const p = purchases.find(x=>x.id===id);
+    const p = purchases.find(x => x.id === id);
     if(p && p.key && status[p.key]){
       status[p.key].out = false; status[p.key].target = false; status[p.key].purchased = false;
     }
-    purchases = purchases.filter(x=>x.id!==id);
+    purchases = purchases.filter(x => x.id !== id);
     applyStatusToDOM(); renderTables();
     return;
   }
   const add = e.target.closest('[data-addrow]');
   if(add){
     const pid = add.getAttribute('data-addrow');
-    const rep = pid==='4' ? 'POR' : PAGES.find(p=>p.id==pid).reparti[0];
+    const rep = pid === '4' ? 'POR' : PAGES.find(p => p.id == pid).reparti[0];
     purchases.push({id:uid++, nome:'', ruolo:rep, speso:0, key:null});
     renderTables();
     return;
   }
+  const q = e.target.closest('.qpill');
+  if(q){
+    const el = document.querySelector(q.getAttribute('data-target'));
+    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    return;
+  }
+  if(e.target.closest('[data-open-fasce]')) openFasce();
 });
 
-document.addEventListener('dblclick', e=>{
+document.addEventListener('dblclick', e => {
   const nameEl = e.target.closest('.prow .pname');
   if(!nameEl) return;
   const row = nameEl.closest('.prow');
   if(row.classList.contains('out') || row.classList.contains('purchased')) return;
   pendingKey = row.getAttribute('data-key');
-  document.getElementById('modalName').textContent = row.getAttribute('data-nome');
+  pendingName = row.getAttribute('data-nome');
+  document.getElementById('modalName').textContent = pendingName;
   const inp = document.getElementById('modalCredits');
   inp.value = '';
   document.getElementById('overlay').classList.add('show');
-  setTimeout(()=>inp.focus(), 80);
+  setTimeout(() => inp.focus(), 80);
 });
 
-document.getElementById('btnCancel').onclick = ()=> document.getElementById('overlay').classList.remove('show');
-document.getElementById('overlay').addEventListener('click', e=>{ if(e.target.id==='overlay') e.currentTarget.classList.remove('show'); });
+document.getElementById('btnCancel').onclick = () => document.getElementById('overlay').classList.remove('show');
+document.getElementById('overlay').addEventListener('click', e => {
+  if(e.target.id === 'overlay') e.currentTarget.classList.remove('show');
+});
 
-document.getElementById('btnConfirm').onclick = ()=>{
+document.getElementById('btnConfirm').onclick = () => {
   if(!pendingKey) return;
-  const [rep, tier, nome] = pendingKey.split('|');
-  const credInp = document.getElementById('modalCredits');
-  const cred = Math.max(0, +credInp.value || 0);
+  const row = document.querySelector(`.prow[data-key="${CSS.escape(pendingKey)}"]`);
+  const rep = row ? row.getAttribute('data-rep') : 'POR';
+  const cred = Math.max(0, +document.getElementById('modalCredits').value || 0);
   status[pendingKey] = status[pendingKey] || {};
-  status[pendingKey].out = true; status[pendingKey].purchased = true; status[pendingKey].target = false;
-  purchases.push({id:uid++, nome, ruolo:rep, speso:cred, key:pendingKey});
+  status[pendingKey].out = true;
+  status[pendingKey].purchased = true;
+  status[pendingKey].target = false;
+  purchases.push({id:uid++, nome:pendingName, ruolo:rep, speso:cred, key:pendingKey});
   applyStatusToDOM(); renderTables();
   document.getElementById('overlay').classList.remove('show');
-  toast('Acquistato: ' + nome + ' — ' + cred + ' cr.');
+  toast('Acquistato: ' + pendingName + ' — ' + cred + ' cr.');
   pendingKey = null;
 };
 
-// input dinamici nelle tabelle (delega)
-document.addEventListener('input', e=>{
+document.addEventListener('input', e => {
   const f = e.target.getAttribute('data-f');
   if(!f) return;
-  const tr = e.target.closest('tr');
-  const id = +tr.getAttribute('data-id');
-  const p = purchases.find(x=>x.id===id);
+  const p = purchases.find(x => x.id === +e.target.closest('tr').getAttribute('data-id'));
   if(!p) return;
-  if(f==='ruolo'){
-    p.ruolo = e.target.value;
-    renderTables();
-    return;
-  }
   p[f] = e.target.value;
   renderTables();
 });
 
-// ---------------- nav "vai a" ----------------
-document.addEventListener('click', e=>{
-  const q = e.target.closest('.qpill');
-  if(!q) return;
-  const el = document.querySelector(q.getAttribute('data-target'));
-  if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+// ---------------- squadra e allenatore ----------------
+function initials(s){
+  const parts = s.trim().split(/\s+/).filter(Boolean);
+  if(!parts.length) return '⚽';
+  return parts.map(w => w[0]).join('').slice(0,2).toUpperCase();
+}
+
+function applyIdentity(){
+  document.getElementById('dispTeam').textContent = teamName || '—';
+  document.getElementById('dispCoach').textContent = coachName || '—';
+  document.getElementById('avTeam').textContent = initials(teamName);
+  document.title = (teamName ? teamName + ' — ' : '') + 'Regia Asta';
+}
+
+function openSetup(first){
+  document.getElementById('inTeam').value = teamName;
+  document.getElementById('inCoach').value = coachName;
+  document.getElementById('setupErr').textContent = '';
+  document.getElementById('btnSetupCancel').hidden = !!first;
+  document.getElementById('setup').classList.add('show');
+  setTimeout(() => document.getElementById('inTeam').focus(), 80);
+}
+
+document.getElementById('btnSetupOk').onclick = () => {
+  const t = document.getElementById('inTeam').value.trim();
+  const c = document.getElementById('inCoach').value.trim();
+  if(!t || !c){
+    document.getElementById('setupErr').textContent = 'Compila entrambi i campi per continuare.';
+    return;
+  }
+  teamName = t; coachName = c;
+  applyIdentity(); autosave();
+  document.getElementById('setup').classList.remove('show');
+  document.getElementById('app').classList.add('show');
+};
+document.getElementById('btnSetupCancel').onclick = () => document.getElementById('setup').classList.remove('show');
+document.getElementById('identity').onclick = () => openSetup(false);
+
+// ---------------- fasce: modalità e editor ----------------
+function countAssigned(rep){ return Object.keys(myFasce()[rep] || {}).length; }
+
+function updateFasceInfo(){
+  const info = document.getElementById('fasceInfo');
+  if(fasceMode === 'custom'){
+    const tot = REPS.reduce((s,r) => s + countAssigned(r), 0);
+    info.textContent = `${tot} giocatori nelle tue fasce · su 565 del listone`;
+  } else {
+    info.textContent = 'Fasce consigliate — puoi comporre le tue quando vuoi';
+  }
+  document.querySelectorAll('#fasceSeg .segb').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-mode') === fasceMode);
+  });
+}
+
+document.getElementById('fasceSeg').addEventListener('click', e => {
+  const b = e.target.closest('.segb');
+  if(!b) return;
+  fasceMode = b.getAttribute('data-mode');
+  rebuild(); autosave();
+  toast(fasceMode === 'custom' ? 'Tabellone sulle tue fasce' : 'Tabellone sulle fasce consigliate');
+});
+
+let fRep = 'POR', fascheDirty = false;
+
+function openFasce(){
+  fascheDirty = false;
+  renderFasce();
+  document.getElementById('fasceOverlay').classList.add('show');
+}
+function closeFasce(){
+  document.getElementById('fasceOverlay').classList.remove('show');
+  if(fascheDirty && fasceMode !== 'custom'){
+    fasceMode = 'custom';
+    toast('Tabellone sulle tue fasce');
+  }
+  rebuild(); autosave();
+}
+document.getElementById('btnEditFasce').onclick = openFasce;
+document.getElementById('btnCloseFasce').onclick = closeFasce;
+document.getElementById('btnDoneFasce').onclick = closeFasce;
+document.getElementById('fasceOverlay').addEventListener('click', e => {
+  if(e.target.id === 'fasceOverlay') closeFasce();
+});
+
+document.getElementById('fRepTabs').addEventListener('click', e => {
+  const b = e.target.closest('.tab');
+  if(!b) return;
+  fRep = b.getAttribute('data-rep');
+  document.querySelectorAll('#fRepTabs .tab').forEach(t => t.classList.toggle('active', t === b));
+  renderFasce();
+});
+document.getElementById('fSearch').addEventListener('input', renderFasce);
+document.getElementById('fFilter').addEventListener('change', renderFasce);
+
+document.getElementById('btnPrefill').onclick = () => {
+  myFasce()[fRep] = Object.assign({}, PREFILL[fRep]);
+  fascheDirty = true;
+  renderFasce(); autosave();
+  toast('Fasce consigliate riprese per ' + REP_LABEL[fRep]);
+};
+document.getElementById('btnClearRep').onclick = () => {
+  myFasce()[fRep] = {};
+  fascheDirty = true;
+  renderFasce(); autosave();
+  toast(REP_LABEL[fRep] + ': fasce svuotate');
+};
+
+function renderFasce(){
+  const map = myFasce()[fRep] || {};
+  const term = document.getElementById('fSearch').value.trim().toUpperCase();
+  const filter = document.getElementById('fFilter').value;
+  const rows = MASTER[fRep].filter(([nome, team]) => {
+    if(term && !(nome.includes(term) || team.includes(term))) return false;
+    if(filter === 'assigned' && !map[nome]) return false;
+    if(filter === 'free' && map[nome]) return false;
+    return true;
+  });
+  const body = rows.map(([nome, team, eta, q]) => {
+    const cur = map[nome] || '';
+    const opts = ['<option value="">— nessuna —</option>']
+      .concat(TIERS.map(t => `<option value="${t}" ${t===cur?'selected':''}>${TIER_LABEL[t]}</option>`)).join('');
+    return `<tr class="${cur?'assigned':''}">
+      <td class="fq">${q}</td>
+      <td class="fn">${esc(nome)}</td>
+      <td class="fs">${esc(team)}</td>
+      <td class="fa">${eta}</td>
+      <td class="ff"><select data-fp="${esc(nome)}" class="${cur?'':'none'}">${opts}</select></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('fTable').innerHTML =
+    `<thead><tr><th>Qt.</th><th>Giocatore</th><th>Squadra</th><th>Età</th><th>Fascia</th></tr></thead><tbody>${body}</tbody>`;
+  document.getElementById('fCount').textContent =
+    `${countAssigned(fRep)} in fascia su ${MASTER[fRep].length} ${REP_LABEL[fRep].toLowerCase()} · ${rows.length} mostrati`;
+}
+
+document.getElementById('fTable').addEventListener('change', e => {
+  const sel = e.target.closest('[data-fp]');
+  if(!sel) return;
+  const nome = sel.getAttribute('data-fp');
+  const map = myFasce()[fRep];
+  if(sel.value) map[nome] = sel.value; else delete map[nome];
+  fascheDirty = true;
+  sel.classList.toggle('none', !sel.value);
+  sel.closest('tr').classList.toggle('assigned', !!sel.value);
+  document.getElementById('fCount').textContent =
+    `${countAssigned(fRep)} in fascia su ${MASTER[fRep].length} ${REP_LABEL[fRep].toLowerCase()}`;
+  autosave();
 });
 
 // ---------------- salvataggio ----------------
 const LS_KEY = 'surraucao_asta_classic_v1';
 
-function snapshot(){ return {status, purchases, uid}; }
+function snapshot(){
+  return {v:2, teamName, coachName, fasceMode, customFasce, status, purchases, uid};
+}
 
 function restore(obj){
   if(!obj) return false;
-  Object.keys(status).forEach(k=>delete status[k]);
-  Object.assign(status, obj.status||{});
-  purchases = obj.purchases||[];
-  uid = obj.uid||1;
+  Object.keys(status).forEach(k => delete status[k]);
+  // le chiavi della v1 erano rep|fascia|nome: non sono più valide
+  Object.entries(obj.status || {}).forEach(([k,v]) => {
+    if(k.split('|').length === 2) status[k] = v;
+  });
+  purchases = (obj.purchases || []).map(p =>
+    Object.assign({}, p, {key: p.key && p.key.split('|').length === 2 ? p.key : null}));
+  uid = obj.uid || 1;
+  teamName = obj.teamName || '';
+  coachName = obj.coachName || '';
+  fasceMode = obj.fasceMode === 'custom' ? 'custom' : 'suggested';
+  customFasce = obj.customFasce || null;
   return true;
 }
 
 function autosave(){
-  try{ localStorage.setItem(LS_KEY, JSON.stringify(snapshot())); }catch(e){ /* storage non disponibile: nessun problema, si usa Salva su file */ }
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(snapshot())); }catch(e){ /* si usa il salvataggio su file */ }
 }
 
 function autoload(){
@@ -511,8 +903,8 @@ function autoload(){
   return false;
 }
 
-document.getElementById('btnSave').onclick = ()=>{
-  const blob = new Blob([JSON.stringify(snapshot(), null, 0)], {type:'application/json'});
+document.getElementById('btnSave').onclick = () => {
+  const blob = new Blob([JSON.stringify(snapshot())], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'asta_classic_progresso.json';
@@ -520,15 +912,15 @@ document.getElementById('btnSave').onclick = ()=>{
   toast('Progresso salvato su file');
 };
 
-document.getElementById('btnLoad').onclick = ()=> document.getElementById('loadFile').click();
-document.getElementById('loadFile').onchange = e=>{
+document.getElementById('btnLoad').onclick = () => document.getElementById('loadFile').click();
+document.getElementById('loadFile').onchange = e => {
   const file = e.target.files[0];
   if(!file) return;
   const reader = new FileReader();
-  reader.onload = ()=>{
+  reader.onload = () => {
     try{
       restore(JSON.parse(reader.result));
-      applyStatusToDOM(); renderTables(); autosave();
+      applyIdentity(); rebuild(); autosave();
       toast('Progresso caricato');
     }catch(err){ toast('File non valido'); }
   };
@@ -537,20 +929,27 @@ document.getElementById('loadFile').onchange = e=>{
 };
 
 // ---------------- tabs ----------------
-document.getElementById('tabs').addEventListener('click', e=>{
+document.getElementById('tabs').addEventListener('click', e => {
   const btn = e.target.closest('.tab');
   if(!btn) return;
-  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active', b===btn));
-  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active', p.id==='page'+btn.getAttribute('data-page')));
+  const page = btn.getAttribute('data-page');
+  document.querySelectorAll('#tabs .tab').forEach(b => b.classList.toggle('active', b === btn));
+  document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === 'page'+page));
+  document.getElementById('subbar').classList.toggle('hide', page === '4');
 });
 
 // ---------------- init ----------------
 const hadSaved = autoload();
-renderShell();
-applyStatusToDOM();
-renderTables();
+applyIdentity();
+rebuild();
 document.getElementById('page1').classList.add('active');
-if(hadSaved) toast('Progresso precedente ripristinato');
+if(teamName){
+  document.getElementById('app').classList.add('show');
+  if(hadSaved) toast('Bentornato, ' + coachName);
+} else {
+  document.getElementById('app').classList.add('show');
+  openSetup(true);
+}
 </script>
 </body>
 </html>
