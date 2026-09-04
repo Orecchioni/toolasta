@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Surraucao 26/27 — Regia Asta</title>
+<title>FantaTool di Michele</title>
+<meta name="description" content="Tabellone interattivo per l'asta del Fantacalcio Classic.">
+<meta property="og:title" content="FantaTool di Michele">
+<meta property="og:description" content="Tabellone interattivo per l'asta del Fantacalcio Classic.">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -800,7 +804,7 @@ function applyIdentity(){
   document.getElementById('dispTeam').textContent = teamName || '—';
   document.getElementById('dispCoach').textContent = coachName || '—';
   document.getElementById('avTeam').textContent = initials(teamName);
-  document.title = (teamName ? teamName + ' — ' : '') + 'Regia Asta';
+  document.title = (teamName ? teamName + ' — ' : '') + 'FantaTool di Michele';
 }
 
 function openSetup(first){
