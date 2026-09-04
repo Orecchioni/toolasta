@@ -380,6 +380,21 @@ table.ftable select.none{color:var(--dim)}
   </div>
 </div>
 
+<!-- ---------- accesso fasce consigliate ---------- -->
+<div class="overlay" id="gateOverlay">
+  <div class="modal">
+    <div class="icon">🔐</div>
+    <h3>Fasce consigliate riservate</h3>
+    <p>Inserisci il codice di sblocco — oppure invia €800 a Michele.</p>
+    <input type="text" id="gateCode" placeholder="Codice segreto" autocomplete="off" style="text-transform:uppercase; letter-spacing:.08em">
+    <div class="setup-err" id="gateErr"></div>
+    <div class="modal-actions">
+      <button class="btn cancel" id="btnGatePay">💸 Ho inviato gli 800€</button>
+      <button class="btn confirm" id="btnGateOk">Sblocca</button>
+    </div>
+  </div>
+</div>
+
 <!-- ---------- editor fasce ---------- -->
 <div class="overlay" id="fasceOverlay">
   <div class="modal wide">
@@ -441,6 +456,8 @@ const PAGES = [
 let teamName = '', coachName = '';
 let fasceMode = 'suggested';            // 'suggested' | 'custom'
 let customFasce = null;                 // {rep:{nomeListone:fascia}}
+let consigliateUnlocked = false;        // sblocco goliardico delle fasce consigliate
+const UNLOCK_CODE = 'TRODDIO';
 const status = {};                      // key -> {out, target, purchased}
 let purchases = [];                     // [{id, nome, ruolo, speso, key}]
 let uid = 1;
@@ -467,6 +484,7 @@ function tiersFor(rep){
     });
     return TIERS.filter(t => buckets[t].length).map(t => [t, buckets[t]]);
   }
+  if(!consigliateUnlocked) return null;   // fasce consigliate bloccate finché non si sblocca
   return SUGGESTED[rep].map(([tier, names]) => [tier, names.map(nome => {
     const m = SUGMETA[rep][nome];
     return m ? {nome, team:m[1], q:m[2], key:m[0]+'|'+m[1]}
@@ -479,6 +497,14 @@ function buildChecklistHTML(){
   let html = '';
   for(const rep of REPS){
     const tiers = tiersFor(rep);
+    if(tiers === null){
+      html += `<section class="reparto" data-reparto-block="${rep}">
+        <div class="rhead"><h3>${REP_LABEL[rep]}</h3><span class="count">🔒 bloccate</span></div>
+        <div class="tiers"><div class="tier-empty">Le fasce consigliate sono riservate.
+          <br><button class="ghostbtn" data-open-gate="1">🔐 Inserisci il codice</button></div></div>
+      </section>`;
+      continue;
+    }
     const total = tiers.reduce((s,t) => s + t[1].length, 0);
     let tiersHtml = '';
     for(const [tier, players] of tiers){
@@ -520,7 +546,7 @@ function renderShell(){
   PAGES.forEach(p => {
     let nav = '<div class="quicknav"><span class="qlbl">Vai a:</span>';
     p.reparti.forEach(rep => {
-      tiersFor(rep).forEach(([tier]) => {
+      (tiersFor(rep) || []).forEach(([tier]) => {
         nav += `<button class="qpill" data-target="#t-${rep}-${tier}">${REP_LABEL[rep]} · ${TIER_LABEL[tier]||tier}</button>`;
       });
     });
@@ -672,6 +698,7 @@ document.addEventListener('click', e => {
     return;
   }
   if(e.target.closest('[data-open-fasce]')) openFasce();
+  if(e.target.closest('[data-open-gate]')) openGate();
 });
 
 document.addEventListener('dblclick', e => {
@@ -764,6 +791,8 @@ function updateFasceInfo(){
   if(fasceMode === 'custom'){
     const tot = REPS.reduce((s,r) => s + countAssigned(r), 0);
     info.textContent = `${tot} giocatori nelle tue fasce · su 565 del listone`;
+  } else if(!consigliateUnlocked){
+    info.textContent = '🔒 Fasce consigliate riservate — inserisci il codice per vederle';
   } else {
     info.textContent = 'Fasce consigliate — puoi comporre le tue quando vuoi';
   }
@@ -775,9 +804,44 @@ function updateFasceInfo(){
 document.getElementById('fasceSeg').addEventListener('click', e => {
   const b = e.target.closest('.segb');
   if(!b) return;
-  fasceMode = b.getAttribute('data-mode');
+  const mode = b.getAttribute('data-mode');
+  if(mode === 'suggested' && !consigliateUnlocked){
+    openGate();
+    return;
+  }
+  fasceMode = mode;
   rebuild(); autosave();
   toast(fasceMode === 'custom' ? 'Tabellone sulle tue fasce' : 'Tabellone sulle fasce consigliate');
+});
+
+// ---------------- sblocco goliardico fasce consigliate ----------------
+function openGate(){
+  document.getElementById('gateCode').value = '';
+  document.getElementById('gateErr').textContent = '';
+  document.getElementById('gateOverlay').classList.add('show');
+  setTimeout(() => document.getElementById('gateCode').focus(), 80);
+}
+function closeGate(){ document.getElementById('gateOverlay').classList.remove('show'); }
+
+document.getElementById('btnGateOk').onclick = () => {
+  const v = document.getElementById('gateCode').value.trim().toUpperCase();
+  if(v === UNLOCK_CODE){
+    consigliateUnlocked = true;
+    fasceMode = 'suggested';
+    closeGate(); rebuild(); autosave();
+    toast('Sbloccato. Le fasce vere sono servite 👑');
+  } else {
+    document.getElementById('gateErr').textContent = 'Codice errato. Riprova — oppure gli €800 a Michele, eh.';
+  }
+};
+document.getElementById('btnGatePay').onclick = () => {
+  document.getElementById('gateErr').textContent = 'Bonifico "ricevuto" (no davvero). Serve il codice vero.';
+};
+document.getElementById('gateOverlay').addEventListener('click', e => {
+  if(e.target.id === 'gateOverlay') closeGate();
+});
+document.getElementById('gateCode').addEventListener('keydown', e => {
+  if(e.key === 'Enter') document.getElementById('btnGateOk').click();
 });
 
 let fRep = 'POR', fascheDirty = false;
@@ -871,7 +935,7 @@ document.getElementById('fTable').addEventListener('change', e => {
 const LS_KEY = 'surraucao_asta_classic_v1';
 
 function snapshot(){
-  return {v:2, teamName, coachName, fasceMode, customFasce, status, purchases, uid};
+  return {v:2, teamName, coachName, fasceMode, customFasce, consigliateUnlocked, status, purchases, uid};
 }
 
 function restore(obj){
@@ -888,6 +952,7 @@ function restore(obj){
   coachName = obj.coachName || '';
   fasceMode = obj.fasceMode === 'custom' ? 'custom' : 'suggested';
   customFasce = obj.customFasce || null;
+  consigliateUnlocked = !!obj.consigliateUnlocked;
   return true;
 }
 
