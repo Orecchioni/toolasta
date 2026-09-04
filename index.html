@@ -195,6 +195,8 @@ main{max-width:1180px; margin:0 auto; padding:18px 16px 0}
   font:inherit; font-weight:700; font-size:13.5px; cursor:pointer; margin-top:12px; transition:.12s;
 }
 .cta-btn:hover{filter:brightness(1.08)}
+.cta-btn.gold{background:linear-gradient(140deg,var(--accent),var(--accent-dim)); color:#1a1305; box-shadow:0 4px 18px rgba(215,163,62,.25)}
+.te-or{color:var(--dim); font-size:11px; text-transform:uppercase; letter-spacing:.08em; margin:16px 0 0}
 
 /* ---------- tabella acquisti ---------- */
 .tbl-wrap{margin:18px 0 30px}
@@ -393,7 +395,7 @@ table.ftable select.none{color:var(--dim)}
   <div class="subbar" id="subbar">
     <span class="sublbl">Fasce</span>
     <div class="seg" id="fasceSeg">
-      <button class="segb active" data-mode="suggested">Consigliate</button>
+      <button class="segb active" data-mode="suggested">🏆 Consigliate</button>
       <button class="segb" data-mode="custom">Le mie</button>
     </div>
     <button class="ghostbtn" id="btnEditFasce">✏️ Personalizza fasce</button>
@@ -563,6 +565,8 @@ function buildChecklistHTML(){
         <div class="te-title">Non hai ancora fasce per i ${REP_LABEL[rep].toLowerCase()}</div>
         Scegli tu i giocatori da tenere d'occhio, reparto per reparto.
         <br><button class="cta-btn" data-open-fasce="1">📝 Compila le tue fasce</button>
+        <div class="te-or">oppure</div>
+        <button class="cta-btn gold" data-open-gate="1">🏆 Usa le fasce consigliate da Michele</button>
       </div>`;
     }
     html += `<section class="reparto" data-reparto-block="${rep}">
@@ -832,7 +836,7 @@ function updateFasceInfo(){
     const tot = REPS.reduce((s,r) => s + countAssigned(r), 0);
     info.textContent = tot
       ? `${tot} giocatori nelle tue fasce · su 565 del listone`
-      : '📝 Ancora vuote — premi "Personalizza fasce" per iniziare';
+      : '📝 Ancora vuote — compilale tu, oppure 🏆 usa le fasce consigliate da Michele';
   } else if(!consigliateUnlocked){
     info.textContent = '🔒 Fasce consigliate riservate — inserisci il codice per vederle';
   } else {
