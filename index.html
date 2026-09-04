@@ -51,6 +51,18 @@ h1,h2,h3,.disp{font-family:'Archivo Narrow',system-ui,sans-serif; letter-spacing
 .setup-err{color:var(--danger); font-size:12.5px; min-height:17px; margin-bottom:6px}
 .setup-actions{display:flex; gap:8px}
 
+/* ---------- loading / benvenuto ---------- */
+.boot-card{text-align:center}
+.boot-card .setup-logo{margin:0 auto 16px}
+.boot-card h1{font-size:22px}
+.boot-card > p{margin-bottom:24px}
+.boot-loading-text{
+  font-family:'Archivo Narrow',system-ui,sans-serif; font-weight:700; font-size:15px; color:var(--dim);
+  display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:14px;
+}
+.progress-track{width:100%; height:9px; background:var(--bg); border:1px solid var(--line); border-radius:999px; overflow:hidden}
+.progress-fill{height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--target)); border-radius:999px}
+
 /* ---------- top bar ---------- */
 .app{display:none}
 .app.show{display:block}
@@ -314,6 +326,25 @@ table.ftable select.none{color:var(--dim)}
 </style>
 </head>
 <body>
+
+<!-- ---------- schermata di caricamento ---------- -->
+<div class="setup show" id="loadingScreen">
+  <div class="setup-card boot-card">
+    <div class="setup-logo">⚽</div>
+    <div class="boot-loading-text">Loading <span id="loadingPct">0%</span></div>
+    <div class="progress-track"><div class="progress-fill" id="loadingBar"></div></div>
+  </div>
+</div>
+
+<!-- ---------- schermata di benvenuto ---------- -->
+<div class="setup" id="welcomeScreen">
+  <div class="setup-card boot-card">
+    <div class="setup-logo">🏆</div>
+    <h1>Benvenuto nel nuovo fantastico tool di Michele.</h1>
+    <p>Sei pronto a vincere il Fantacalcio?</p>
+    <button class="btn confirm" id="btnWelcomeStart" style="width:100%">INIZIA</button>
+  </div>
+</div>
 
 <!-- ---------- schermata iniziale ---------- -->
 <div class="setup" id="setup">
@@ -1019,13 +1050,35 @@ const hadSaved = autoload();
 applyIdentity();
 rebuild();
 document.getElementById('page1').classList.add('active');
-if(teamName){
-  document.getElementById('app').classList.add('show');
-  if(hadSaved) toast('Bentornato, ' + coachName);
-} else {
-  document.getElementById('app').classList.add('show');
-  openSetup(true);
-}
+document.getElementById('app').classList.add('show');
+
+document.getElementById('btnWelcomeStart').onclick = () => {
+  document.getElementById('welcomeScreen').classList.remove('show');
+  if(teamName){
+    if(hadSaved) toast('Bentornato, ' + coachName);
+  } else {
+    openSetup(true);
+  }
+};
+
+(function runLoadingBar(){
+  const bar = document.getElementById('loadingBar');
+  const pct = document.getElementById('loadingPct');
+  const dur = 2000;
+  const start = performance.now();
+  function tick(now){
+    const p = Math.min(100, Math.round((now - start) / dur * 100));
+    bar.style.width = p + '%';
+    pct.textContent = p + '%';
+    if(p < 100){
+      requestAnimationFrame(tick);
+    } else {
+      document.getElementById('loadingScreen').classList.remove('show');
+      document.getElementById('welcomeScreen').classList.add('show');
+    }
+  }
+  requestAnimationFrame(tick);
+})();
 </script>
 </body>
 </html>
