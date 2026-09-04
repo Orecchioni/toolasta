@@ -177,6 +177,12 @@ main{max-width:1180px; margin:0 auto; padding:18px 16px 0}
 .prow.purchased .flag{opacity:.35; cursor:not-allowed}
 .tier-empty{padding:22px 14px; color:var(--dim); font-size:13px; text-align:center; width:100%}
 .tier-empty button{margin-top:10px}
+.tier-empty .te-title{color:var(--text); font-weight:700; font-size:14.5px; margin-bottom:4px}
+.cta-btn{
+  background:var(--target); color:#06210f; border:none; padding:10px 22px; border-radius:9px;
+  font:inherit; font-weight:700; font-size:13.5px; cursor:pointer; margin-top:12px; transition:.12s;
+}
+.cta-btn:hover{filter:brightness(1.08)}
 
 /* ---------- tabella acquisti ---------- */
 .tbl-wrap{margin:18px 0 30px}
@@ -454,7 +460,7 @@ const PAGES = [
 
 // ---------------- stato ----------------
 let teamName = '', coachName = '';
-let fasceMode = 'suggested';            // 'suggested' | 'custom'
+let fasceMode = 'custom';               // 'suggested' | 'custom' — si parte dalle proprie fasce, vuote
 let customFasce = null;                 // {rep:{nomeListone:fascia}}
 let consigliateUnlocked = false;        // sblocco goliardico delle fasce consigliate
 const UNLOCK_CODE = 'TRODDIO';
@@ -468,7 +474,7 @@ function normName(s){
 }
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function myFasce(){
-  if(!customFasce) customFasce = JSON.parse(JSON.stringify(PREFILL));
+  if(!customFasce) customFasce = {POR:{}, DIF:{}, CEN:{}, ATT:{}};   // si parte vuoti: le compila l'utente
   return customFasce;
 }
 
@@ -522,8 +528,11 @@ function buildChecklistHTML(){
       tiersHtml += `<div class="tier" id="t-${rep}-${tier}"><h4>${TIER_LABEL[tier]||tier}</h4><ul class="plist">${rows}</ul></div>`;
     }
     if(!total){
-      tiersHtml = `<div class="tier-empty">Nessun giocatore in fascia per questo reparto.
-        <br><button class="ghostbtn" data-open-fasce="1">✏️ Componi le tue fasce</button></div>`;
+      tiersHtml = `<div class="tier-empty">
+        <div class="te-title">Non hai ancora fasce per i ${REP_LABEL[rep].toLowerCase()}</div>
+        Scegli tu i giocatori da tenere d'occhio, reparto per reparto.
+        <br><button class="cta-btn" data-open-fasce="1">📝 Compila le tue fasce</button>
+      </div>`;
     }
     html += `<section class="reparto" data-reparto-block="${rep}">
       <div class="rhead"><h3>${REP_LABEL[rep]}</h3><span class="count">${total} giocatori</span></div>
@@ -790,7 +799,9 @@ function updateFasceInfo(){
   const info = document.getElementById('fasceInfo');
   if(fasceMode === 'custom'){
     const tot = REPS.reduce((s,r) => s + countAssigned(r), 0);
-    info.textContent = `${tot} giocatori nelle tue fasce · su 565 del listone`;
+    info.textContent = tot
+      ? `${tot} giocatori nelle tue fasce · su 565 del listone`
+      : '📝 Ancora vuote — premi "Personalizza fasce" per iniziare';
   } else if(!consigliateUnlocked){
     info.textContent = '🔒 Fasce consigliate riservate — inserisci il codice per vederle';
   } else {
@@ -950,7 +961,7 @@ function restore(obj){
   uid = obj.uid || 1;
   teamName = obj.teamName || '';
   coachName = obj.coachName || '';
-  fasceMode = obj.fasceMode === 'custom' ? 'custom' : 'suggested';
+  fasceMode = obj.fasceMode === 'suggested' ? 'suggested' : 'custom';
   customFasce = obj.customFasce || null;
   consigliateUnlocked = !!obj.consigliateUnlocked;
   return true;
