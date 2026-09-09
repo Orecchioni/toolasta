@@ -46,6 +46,8 @@ h1,h2,h3,.disp{font-family:'Archivo Narrow',system-ui,sans-serif; letter-spacing
 .setup-card > p{margin:0 0 22px; color:var(--dim); font-size:13.5px}
 .field{margin-bottom:16px}
 .field label{display:block; font-size:13px; font-weight:600; margin-bottom:6px}
+.budget-seg{width:100%}
+.budget-seg .segb{flex:1; text-align:center; font-size:14px; padding:9px 6px}
 .field input{
   width:100%; background:var(--bg); border:1px solid var(--line); color:var(--text); font:inherit;
   font-size:15px; padding:11px 13px; border-radius:9px; transition:.12s;
@@ -381,6 +383,14 @@ table.ftable select.none{color:var(--dim)}
       <label for="inCoach">Come si chiama il tuo allenatore?</label>
       <input id="inCoach" type="text" placeholder="Es. Michele" maxlength="40" autocomplete="off">
     </div>
+    <div class="field">
+      <label>Budget crediti per l'asta</label>
+      <div class="seg budget-seg" id="budgetSeg">
+        <button type="button" class="segb" data-budget="300">300</button>
+        <button type="button" class="segb active" data-budget="500">500</button>
+        <button type="button" class="segb" data-budget="1000">1000</button>
+      </div>
+    </div>
     <div class="setup-err" id="setupErr"></div>
     <div class="setup-actions">
       <button class="btn cancel" id="btnSetupCancel" hidden>Annulla</button>
@@ -499,7 +509,8 @@ const MASTER    = JSON.parse(document.getElementById('master').textContent);
 const SUGMETA   = JSON.parse(document.getElementById('sugmeta').textContent);
 const PREFILL   = JSON.parse(document.getElementById('prefill').textContent);
 
-const BUDGET = 500;
+let BUDGET = 500;
+const BUDGET_OPTIONS = [300, 500, 1000];
 const REPS = ['POR','DIF','CEN','ATT'];
 const TIERS = ['TOP','I','II','III','Titolari','Scommesse'];
 const REP_LABEL = {POR:'Portieri', DIF:'Difensori', CEN:'Centrocampisti', ATT:'Attaccanti'};
@@ -887,11 +898,20 @@ function applyIdentity(){
 function openSetup(first){
   document.getElementById('inTeam').value = teamName;
   document.getElementById('inCoach').value = coachName;
+  document.querySelectorAll('#budgetSeg .segb').forEach(b => {
+    b.classList.toggle('active', +b.getAttribute('data-budget') === BUDGET);
+  });
   document.getElementById('setupErr').textContent = '';
   document.getElementById('btnSetupCancel').hidden = !!first;
   document.getElementById('setup').classList.add('show');
   setTimeout(() => document.getElementById('inTeam').focus(), 80);
 }
+
+document.getElementById('budgetSeg').addEventListener('click', e => {
+  const b = e.target.closest('.segb');
+  if(!b) return;
+  document.querySelectorAll('#budgetSeg .segb').forEach(x => x.classList.toggle('active', x === b));
+});
 
 document.getElementById('btnSetupOk').onclick = () => {
   const t = document.getElementById('inTeam').value.trim();
@@ -900,8 +920,12 @@ document.getElementById('btnSetupOk').onclick = () => {
     document.getElementById('setupErr').textContent = 'Compila entrambi i campi per continuare.';
     return;
   }
-  teamName = t; coachName = c;
+  const budgetBtn = document.querySelector('#budgetSeg .segb.active');
+  const newBudget = budgetBtn ? +budgetBtn.getAttribute('data-budget') : BUDGET;
+  const budgetChanged = newBudget !== BUDGET;
+  teamName = t; coachName = c; BUDGET = newBudget;
   applyIdentity(); autosave();
+  if(budgetChanged) renderTables();   // aggiorna i crediti residui su tutte le pagine
   document.getElementById('setup').classList.remove('show');
   document.getElementById('app').classList.add('show');
 };
@@ -1062,7 +1086,7 @@ document.getElementById('fTable').addEventListener('change', e => {
 const LS_KEY = 'surraucao_asta_classic_v1';
 
 function snapshot(){
-  return {v:2, teamName, coachName, fasceMode, customFasce, consigliateUnlocked, status, purchases, uid};
+  return {v:2, teamName, coachName, BUDGET, fasceMode, customFasce, consigliateUnlocked, status, purchases, uid};
 }
 
 function restore(obj){
@@ -1080,6 +1104,7 @@ function restore(obj){
   fasceMode = obj.fasceMode === 'suggested' ? 'suggested' : 'custom';
   customFasce = obj.customFasce || null;
   consigliateUnlocked = !!obj.consigliateUnlocked;
+  BUDGET = BUDGET_OPTIONS.includes(+obj.BUDGET) ? +obj.BUDGET : 500;
   return true;
 }
 
