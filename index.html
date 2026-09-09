@@ -416,8 +416,10 @@ table.ftable select.none{color:var(--dim)}
       <button class="tab" data-page="4">Rosa</button>
     </div>
     <div class="budget"><span class="lbl">Residuo</span><span class="num" id="budgetNum">500</span></div>
+    <button class="iconbtn" id="btnBudget" title="Cambia budget dell'asta">💰</button>
     <button class="iconbtn" id="btnSave" title="Salva progresso su file">💾</button>
     <button class="iconbtn" id="btnLoad" title="Carica progresso da file">📂</button>
+    <button class="iconbtn" id="btnLogout" title="Esci">🚪</button>
     <input type="file" id="loadFile" accept="application/json" style="display:none">
   </div>
 
@@ -444,6 +446,38 @@ table.ftable select.none{color:var(--dim)}
     <div class="modal-actions">
       <button class="btn cancel" id="btnCancel">Annulla</button>
       <button class="btn confirm" id="btnConfirm">Conferma</button>
+    </div>
+  </div>
+</div>
+
+<!-- ---------- cambio budget rapido ---------- -->
+<div class="overlay" id="budgetOverlay">
+  <div class="modal">
+    <div class="icon">💰</div>
+    <h3>Budget dell'asta</h3>
+    <p>Crediti disponibili per la tua squadra.</p>
+    <div class="seg budget-seg" id="budgetSeg2">
+      <button type="button" class="segb" data-budget="300">300</button>
+      <button type="button" class="segb" data-budget="500">500</button>
+      <button type="button" class="segb" data-budget="1000">1000</button>
+    </div>
+    <div class="modal-actions" style="margin-top:20px">
+      <button class="btn cancel" id="btnBudgetCancel">Annulla</button>
+      <button class="btn confirm" id="btnBudgetOk">Salva</button>
+    </div>
+  </div>
+</div>
+
+<!-- ---------- scelta al login: continua o nuova asta ---------- -->
+<div class="overlay" id="loginChoiceOverlay">
+  <div class="modal">
+    <div class="icon">👋</div>
+    <h3>Bentornato</h3>
+    <p class="pname2" id="lcTeamName">—</p>
+    <p>Hai un'asta salvata. Vuoi continuare da dove eri rimasto o iniziarne una nuova?</p>
+    <div class="modal-actions">
+      <button class="btn cancel" id="btnNewAuction">🆕 Nuova asta</button>
+      <button class="btn confirm" id="btnContinueAuction">▶️ Continua</button>
     </div>
   </div>
 </div>
@@ -907,10 +941,10 @@ function openSetup(first){
   setTimeout(() => document.getElementById('inTeam').focus(), 80);
 }
 
-document.getElementById('budgetSeg').addEventListener('click', e => {
-  const b = e.target.closest('.segb');
+document.addEventListener('click', e => {
+  const b = e.target.closest('.budget-seg .segb');
   if(!b) return;
-  document.querySelectorAll('#budgetSeg .segb').forEach(x => x.classList.toggle('active', x === b));
+  b.parentElement.querySelectorAll('.segb').forEach(x => x.classList.toggle('active', x === b));
 });
 
 document.getElementById('btnSetupOk').onclick = () => {
@@ -931,6 +965,60 @@ document.getElementById('btnSetupOk').onclick = () => {
 };
 document.getElementById('btnSetupCancel').onclick = () => document.getElementById('setup').classList.remove('show');
 document.getElementById('identity').onclick = () => openSetup(false);
+
+// ---------------- cambio budget rapido (dentro il tool) ----------------
+document.getElementById('btnBudget').onclick = () => {
+  document.querySelectorAll('#budgetSeg2 .segb').forEach(b => {
+    b.classList.toggle('active', +b.getAttribute('data-budget') === BUDGET);
+  });
+  document.getElementById('budgetOverlay').classList.add('show');
+};
+document.getElementById('btnBudgetCancel').onclick = () => document.getElementById('budgetOverlay').classList.remove('show');
+document.getElementById('budgetOverlay').addEventListener('click', e => {
+  if(e.target.id === 'budgetOverlay') e.currentTarget.classList.remove('show');
+});
+document.getElementById('btnBudgetOk').onclick = () => {
+  const budgetBtn = document.querySelector('#budgetSeg2 .segb.active');
+  const newBudget = budgetBtn ? +budgetBtn.getAttribute('data-budget') : BUDGET;
+  const changed = newBudget !== BUDGET;
+  BUDGET = newBudget;
+  autosave();
+  if(changed){ renderTables(); toast('Budget aggiornato a ' + BUDGET + ' crediti'); }
+  document.getElementById('budgetOverlay').classList.remove('show');
+};
+
+// ---------------- logout e scelta al login ----------------
+let justLoggedOut = false;
+
+document.getElementById('btnLogout').onclick = () => {
+  document.getElementById('app').classList.remove('show');
+  justLoggedOut = true;
+  document.getElementById('welcomeScreen').classList.add('show');
+};
+
+function resetAllData(){
+  teamName = ''; coachName = ''; BUDGET = 500;
+  fasceMode = 'custom'; customFasce = null; consigliateUnlocked = false;
+  Object.keys(status).forEach(k => delete status[k]);
+  purchases = []; uid = 1;
+  try{ localStorage.removeItem(LS_KEY); }catch(e){ /* ignorato */ }
+}
+
+function openLoginChoice(){
+  document.getElementById('lcTeamName').textContent = teamName;
+  document.getElementById('loginChoiceOverlay').classList.add('show');
+}
+document.getElementById('btnContinueAuction').onclick = () => {
+  document.getElementById('loginChoiceOverlay').classList.remove('show');
+  document.getElementById('app').classList.add('show');
+  toast('Bentornato, ' + coachName);
+};
+document.getElementById('btnNewAuction').onclick = () => {
+  document.getElementById('loginChoiceOverlay').classList.remove('show');
+  resetAllData();
+  applyIdentity(); rebuild();
+  openSetup(true);
+};
 
 // ---------------- fasce: modalità e editor ----------------
 function countAssigned(rep){ return Object.keys(myFasce()[rep] || {}).length; }
@@ -1164,7 +1252,11 @@ document.getElementById('app').classList.add('show');
 
 document.getElementById('btnWelcomeStart').onclick = () => {
   document.getElementById('welcomeScreen').classList.remove('show');
-  if(teamName){
+  if(justLoggedOut && teamName){
+    justLoggedOut = false;
+    openLoginChoice();
+  } else if(teamName){
+    document.getElementById('app').classList.add('show');
     if(hadSaved) toast('Bentornato, ' + coachName);
   } else {
     openSetup(true);
